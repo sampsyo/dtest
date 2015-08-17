@@ -509,11 +509,14 @@ unsigned int bucket_for(uint64_t key) {
 }
 
 template <hash_func_t HF>
-bool collide() {
-    unsigned int bucket1 = bucket_for<HF>(rand());
-    unsigned int bucket2 = bucket_for<HF>(rand());
+bool collide(uint64_t key1, uint64_t key2) {
+    unsigned int bucket1 = bucket_for<HF>(key1);
+    unsigned int bucket2 = bucket_for<HF>(key2);
     return bucket1 == bucket2;
 }
+
+#define FOR_ALL_HASHES(m) \
+    m(HashBernstein, 0);
 
 int main(int argc, const char **argv) {
     size_t collisions[NFUNCTIONS];
@@ -521,16 +524,19 @@ int main(int argc, const char **argv) {
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
-        if (collide<HashBernstein>()) {
-            ++collisions[0];
-        }
+        uint64_t key1 = rand();
+        uint64_t key2 = rand();
+
+        #define COLLIDE(NAME, INDEX) \
+            if (collide<NAME>(key1, key2)) { \
+                ++collisions[INDEX]; \
+            }
+        FOR_ALL_HASHES(COLLIDE);
     }
 
     // Print out probabilities.
-    for (int i = 0; i < NFUNCTIONS; ++i) {
-        float prob = (((float) collisions[i]) / NTESTS);
-        printf("%f\n", prob);
-        printf("%f\n", prob * BUCKETS);
-        printf("%lu\n", collisions[i]);
-    }
+    #define PRINT_PROB(NAME, INDEX) \
+        printf(#NAME ": %f\n", \
+            (((float) collisions[INDEX]) / NTESTS) * BUCKETS);
+    FOR_ALL_HASHES(PRINT_PROB);
 }
