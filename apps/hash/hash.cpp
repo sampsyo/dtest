@@ -498,6 +498,7 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
 
 const size_t BUCKETS = 256;
 const size_t NTESTS = 1L << 20;
+const size_t NFUNCTIONS = 1;
 
 typedef unsigned int hash_func_t(const char *key, size_t len);
 
@@ -515,17 +516,21 @@ bool collide() {
 }
 
 int main(int argc, const char **argv) {
-    size_t collisions = 0;
+    size_t collisions[NFUNCTIONS];
+    memset(collisions, 0, sizeof(collisions));
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
         if (collide<HashBernstein>()) {
-            ++collisions;
+            ++collisions[0];
         }
     }
 
-    float prob = (((float) collisions) / NTESTS);
-    printf("%f\n", prob);
-    printf("%f\n", prob * BUCKETS);
-    printf("%lu\n", collisions);
+    // Print out probabilities.
+    for (int i = 0; i < NFUNCTIONS; ++i) {
+        float prob = (((float) collisions[i]) / NTESTS);
+        printf("%f\n", prob);
+        printf("%f\n", prob * BUCKETS);
+        printf("%lu\n", collisions[i]);
+    }
 }
