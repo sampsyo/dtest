@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #define UINT unsigned int
 #define CHAR char
@@ -492,4 +494,35 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
 
   final(a,b,c);
   return c;
+}
+
+const size_t BUCKETS = 256;
+const size_t NKEYS = 2048;
+
+int main(int argc, const char **argv) {
+    size_t bucket_lengths[BUCKETS];
+
+    // Initialize the buckets.
+    memset(bucket_lengths, 0, sizeof(bucket_lengths));
+
+    // Hash some keys.
+    for (int i = 0; i < NKEYS; ++i) {
+        const uint64_t key = rand();
+        unsigned int hash = HashBernstein((const char *)&key, sizeof(key));
+        unsigned int bucket = hash % BUCKETS;
+        ++bucket_lengths[bucket];
+    }
+
+    // Count the collisions.
+    size_t collisions = 0;
+    for (int i = 0; i < BUCKETS; ++i) {
+        size_t length = bucket_lengths[i];
+        if (length > 1) {
+            collisions += length - 1;
+        }
+    }
+    float prob = ((float) collisions) / NKEYS;
+
+    printf("%f\n", prob);
+    printf("%lu\n", collisions);
 }
