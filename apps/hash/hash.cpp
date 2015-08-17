@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <random>
 
 #define UINT unsigned int
 #define CHAR char
@@ -538,16 +539,31 @@ unsigned int our_hash(uint64_t key) {
     return 734507 * key + 58578;
 }
 
+
+// TODO make these not globals!
+std::normal_distribution<double> distribution(0.0, 1.0);
+const uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max();
+
+double normal01(std::default_random_engine& generator) {
+    for (;;) {
+        double val = distribution(generator);
+        if (val >= 0.0 && val < 1.0) {
+            return val;
+        }
+    }
+}
+
 int main(int argc, const char **argv) {
     size_t collisions[NFUNCTIONS];
     memset(collisions, 0, sizeof(collisions));
 
-    srand(time(NULL));
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
-        uint64_t key1 = rand();
-        uint64_t key2 = rand();
+        uint64_t key1 = normal01(generator) * uint64_t_max;
+        uint64_t key2 = normal01(generator) * uint64_t_max;
 
         #define COLLIDE(NAME, INDEX) \
             if (collide<NAME>(key1, key2)) { \
