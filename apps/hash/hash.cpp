@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #define UINT unsigned int
 #define CHAR char
@@ -498,7 +499,7 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
 
 const size_t BUCKETS = 256;
 const size_t NTESTS = 1L << 20;
-const size_t NFUNCTIONS = 17;
+const size_t NFUNCTIONS = 18;
 
 typedef unsigned int hash_func_t(const char *key, size_t len);
 
@@ -533,9 +534,15 @@ bool collide(uint64_t key1, uint64_t key2) {
     MACRO(HashUniversal, 15); \
     MACRO(HashLookup3, 16);
 
+unsigned int our_hash(uint64_t key) {
+    return 734507 * key + 58578;
+}
+
 int main(int argc, const char **argv) {
     size_t collisions[NFUNCTIONS];
     memset(collisions, 0, sizeof(collisions));
+
+    srand(time(NULL));
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
@@ -547,6 +554,10 @@ int main(int argc, const char **argv) {
                 ++collisions[INDEX]; \
             }
         FOR_ALL_HASHES(COLLIDE);
+
+        if (our_hash(key1) % BUCKETS == our_hash(key2) % BUCKETS) {
+            ++collisions[NFUNCTIONS - 1];
+        }
     }
 
     // Print out probabilities.
@@ -554,4 +565,7 @@ int main(int argc, const char **argv) {
         printf(#NAME ": %f\n", \
             (((float) collisions[INDEX]) / NTESTS) * BUCKETS);
     FOR_ALL_HASHES(PRINT_PROB);
+
+    printf("OurHash: %f\n",
+        (((float) collisions[NFUNCTIONS - 1]) / NTESTS) * BUCKETS);
 }
