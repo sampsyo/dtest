@@ -498,7 +498,7 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
 
 const size_t BUCKETS = 256;
 const size_t NTESTS = 1L << 20;
-const size_t NFUNCTIONS = 1;
+const size_t NFUNCTIONS = 17;
 
 typedef unsigned int hash_func_t(const char *key, size_t len);
 
@@ -515,8 +515,23 @@ bool collide(uint64_t key1, uint64_t key2) {
     return bucket1 == bucket2;
 }
 
-#define FOR_ALL_HASHES(m) \
-    m(HashBernstein, 0);
+#define FOR_ALL_HASHES(MACRO) \
+    MACRO(HashBernstein, 0); \
+    MACRO(HashLarson, 1); \
+    MACRO(HashKernighanRitchie, 3); \
+    MACRO(Hash17_unrolled, 4); \
+    MACRO(Hash17, 5); \
+    MACRO(Hash65599, 6); \
+    MACRO(HashFNV1a, 7); \
+    MACRO(HashWeinberger, 8); \
+    MACRO(HashRamakrishna, 9); \
+    MACRO(HashFletcher, 10); \
+    MACRO(HashMurmur2, 11); \
+    MACRO(HashPaulHsieh, 12); \
+    MACRO(HashOneAtTime, 13); \
+    MACRO(HashArashPartow, 14); \
+    MACRO(HashUniversal, 15); \
+    MACRO(HashLookup3, 16);
 
 int main(int argc, const char **argv) {
     size_t collisions[NFUNCTIONS];
