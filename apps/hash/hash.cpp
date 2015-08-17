@@ -499,9 +499,19 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
 const size_t BUCKETS = 256;
 const size_t NTESTS = 1L << 20;
 
+typedef unsigned int hash_func_t(const char *key, size_t len);
+
+template <hash_func_t HF>
 unsigned int bucket_for(uint64_t key) {
-    unsigned int hash = HashBernstein((const char *)&key, sizeof(key));
+    unsigned int hash = HF((const char *)&key, sizeof(key));
     return hash % BUCKETS;
+}
+
+template <hash_func_t HF>
+bool collide() {
+    unsigned int bucket1 = bucket_for<HF>(rand());
+    unsigned int bucket2 = bucket_for<HF>(rand());
+    return bucket1 == bucket2;
 }
 
 int main(int argc, const char **argv) {
@@ -509,9 +519,7 @@ int main(int argc, const char **argv) {
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
-        unsigned int bucket1 = bucket_for(rand());
-        unsigned int bucket2 = bucket_for(rand());
-        if (bucket1 == bucket2) {
+        if (collide<HashBernstein>()) {
             ++collisions;
         }
     }
