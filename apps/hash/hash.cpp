@@ -541,29 +541,50 @@ unsigned int our_hash(uint64_t key) {
 
 
 // TODO make these not globals!
-std::normal_distribution<double> distribution(0.0, 1.0);
 const uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max();
 
-double normal01(std::default_random_engine& generator) {
-    for (;;) {
-        double val = distribution(generator);
-        if (val >= 0.0 && val < 1.0) {
-            return val;
+template <typename Dist>
+class Generator {
+public:
+    std::default_random_engine &engine;
+    Dist distribution;
+
+    Generator(std::default_random_engine &eng,
+              Dist dist) :
+        engine(eng),
+        distribution(dist)
+    {};
+
+    // Limit the distribution to the range [0.0, 1.0].
+    double sample() {
+        for (;;) {
+            double val = distribution(engine);
+            if (val >= 0.0 && val < 1.0) {
+                return val;
+            }
         }
     }
-}
+
+    // Scale a sample to the range of 64-bit unsigned integers.
+    uint64_t operator()() {
+        return sample() * uint64_t_max;
+    }
+};
 
 int main(int argc, const char **argv) {
     size_t collisions[NFUNCTIONS];
     memset(collisions, 0, sizeof(collisions));
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
+    std::default_random_engine engine(seed);
+
+    std::normal_distribution<double> distribution(0.0, 1.0);
+    Generator< std::normal_distribution<double> > gen(engine, distribution);
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
-        uint64_t key1 = normal01(generator) * uint64_t_max;
-        uint64_t key2 = normal01(generator) * uint64_t_max;
+        uint64_t key1 = gen();
+        uint64_t key2 = gen();
 
         #define COLLIDE(NAME, INDEX) \
             if (collide<NAME>(key1, key2)) { \
