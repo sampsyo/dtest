@@ -591,12 +591,17 @@ int main(int argc, const char **argv) {
     Generator< std::normal_distribution<double> > gen(engine, distribution,
             false);
     */
-    std::array<double, 3> intervals = {0.0, 0.001, 1.0};
-    std::array<double, 2> weights = {1.0, 0.00001};
+    /*
+    std::array<double, 3> intervals = {0.0, 0.00001, 1.0};
+    std::array<double, 2> weights = {1.0, 0.000001};
     std::piecewise_constant_distribution<double> distribution
         (intervals.begin(), intervals.end(), weights.begin());
     Generator< std::piecewise_constant_distribution<double> > gen(engine,
             distribution, false);
+    */
+    std::poisson_distribution<uint64_t> distribution(100);
+    Generator< std::poisson_distribution<uint64_t> > gen(engine,
+            distribution, true);
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
