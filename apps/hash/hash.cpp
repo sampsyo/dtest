@@ -548,11 +548,14 @@ class Generator {
 public:
     std::default_random_engine &engine;
     Dist distribution;
+    bool discrete;
 
     Generator(std::default_random_engine &eng,
-              Dist dist) :
+              Dist dist,
+              bool disc) :
         engine(eng),
-        distribution(dist)
+        distribution(dist),
+        discrete(disc) // One day, let's eliminate this.
     {};
 
     // Limit the distribution to the range [0.0, 1.0].
@@ -567,7 +570,11 @@ public:
 
     // Scale a sample to the range of 64-bit unsigned integers.
     uint64_t operator()() {
-        return sample() * uint64_t_max;
+        if (discrete) {
+            return distribution(engine);
+        } else {
+            return sample() * uint64_t_max;
+        }
     }
 };
 
@@ -579,7 +586,8 @@ int main(int argc, const char **argv) {
     std::default_random_engine engine(seed);
 
     std::normal_distribution<double> distribution(0.0, 1.0);
-    Generator< std::normal_distribution<double> > gen(engine, distribution);
+    Generator< std::normal_distribution<double> > gen(engine, distribution,
+            false);
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
