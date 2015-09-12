@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <random>
+#include <array>
 
 #define UINT unsigned int
 #define CHAR char
@@ -585,9 +586,17 @@ int main(int argc, const char **argv) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine engine(seed);
 
+    /*
     std::normal_distribution<double> distribution(0.0, 1.0);
     Generator< std::normal_distribution<double> > gen(engine, distribution,
             false);
+    */
+    std::array<double, 3> intervals = {0.0, 0.001, 1.0};
+    std::array<double, 2> weights = {1.0, 0.00001};
+    std::piecewise_constant_distribution<double> distribution
+        (intervals.begin(), intervals.end(), weights.begin());
+    Generator< std::piecewise_constant_distribution<double> > gen(engine,
+            distribution, false);
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
