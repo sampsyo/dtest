@@ -599,8 +599,13 @@ int main(int argc, const char **argv) {
     Generator< std::piecewise_constant_distribution<double> > gen(engine,
             distribution, false);
     */
+    /*
     std::poisson_distribution<uint64_t> distribution(100);
     Generator< std::poisson_distribution<uint64_t> > gen(engine,
+            distribution, true);
+    */
+    std::uniform_int_distribution<uint64_t> distribution(53, 151);
+    Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
             distribution, true);
 
     // Hash some keys.
