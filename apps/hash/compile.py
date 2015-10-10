@@ -31,9 +31,18 @@ Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
 DRIVER_SOURCE = "hash.cpp"
 
 
+def c_literal(v):
+    if isinstance(v, list):
+        s = str(v)
+        return '{' + s[1:-1] + '}'
+    else:
+        return v
+
+
 def emit_distribution(dist):
     code = CODE[dist['kind']]
-    return code.format(**dist).strip()
+    values = {k: c_literal(v) for k, v in dist.items()}
+    return code.format(**values).strip()
 
 
 def generator_c(dist):
