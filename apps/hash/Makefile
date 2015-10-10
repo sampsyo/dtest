@@ -13,3 +13,6 @@ clean:
 
 results.json: compile.py hash.cpp distributions.json
 	python3 compile.py distributions.json
+
+hash_%: %.c hash.cpp
+	$(CXX) -o $@ hash.cpp -D GENERATOR_C=\"$<\"

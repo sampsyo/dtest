@@ -606,7 +606,7 @@ int main(int argc, const char **argv) {
             }
         FOR_ALL_HASHES(COLLIDE);
 
-        if (our_hash(key1) % BUCKETS == our_hash(key2) % 251) {
+        if (our_hash(key1) % 251 == our_hash(key2) % 251) {
             // printf("%u %llu %llu\n", our_hash(key1) % 251, key1, key2);
             ++collisions[NFUNCTIONS - 1];
         }
