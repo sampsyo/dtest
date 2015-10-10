@@ -1,5 +1,6 @@
 import json
 import sys
+import subprocess
 
 
 CODE = {
@@ -27,18 +28,40 @@ Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
         distribution, true);
 """,
 }
+DRIVER_SOURCE = "hash.cpp"
 
 
 def emit_distribution(dist):
     code = CODE[dist['kind']]
-    return code.format(**dist)
+    return code.format(**dist).strip()
+
+
+def generator_c(dist):
+    return '{}.c'.format(dist['name'])
+
+
+def write_distribution(dist):
+    c = emit_distribution(dist)
+    fn = generator_c(dist)
+    with open(fn, 'w') as f:
+        f.write(c)
+
+
+def compile_driver(dist):
+    gen_c = generator_c(dist)
+    exe = 'hash_{}'.format(dist['name'])
+    command = ["c++", DRIVER_SOURCE,
+               "-D", "GENERATOR_C=\"{}\"".format(gen_c),
+               "-o", exe]
+    subprocess.check_output(command)
 
 
 def main(jsonfile):
     with open(jsonfile) as f:
         dists = json.load(f)
         for dist in dists:
-            print(emit_distribution(dist))
+            write_distribution(dist)
+            compile_driver(dist)
 
 
 if __name__ == '__main__':

@@ -587,25 +587,13 @@ int main(int argc, const char **argv) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine engine(seed);
 
+#ifdef GENERATOR_C
+#include GENERATOR_C
+#else
     std::normal_distribution<double> distribution(0.0, 1.0);
     Generator< std::normal_distribution<double> > gen(engine, distribution,
             false);
-    /*
-    std::array<double, 3> intervals = {0.0, 0.00001, 1.0};
-    std::array<double, 2> weights = {1.0, 0.000001};
-    std::piecewise_constant_distribution<double> distribution
-        (intervals.begin(), intervals.end(), weights.begin());
-    Generator< std::piecewise_constant_distribution<double> > gen(engine,
-            distribution, false);
-    std::poisson_distribution<uint64_t> distribution(1000);
-    Generator< std::poisson_distribution<uint64_t> > gen(engine,
-            distribution, true);
-    */
-    /*
-    std::uniform_int_distribution<uint64_t> distribution(10000900, 10001100);
-    Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
-            distribution, true);
-    */
+#endif
 
     // Hash some keys.
     for (int i = 0; i < NTESTS; ++i) {
