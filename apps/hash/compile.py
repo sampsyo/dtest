@@ -1,6 +1,7 @@
 import json
 import sys
 import subprocess
+import os
 
 
 CODE = {
@@ -59,18 +60,41 @@ def write_distribution(dist):
 def compile_driver(dist):
     gen_c = generator_c(dist)
     exe = 'hash_{}'.format(dist['name'])
+    print('compiling', exe)
     command = ["c++", DRIVER_SOURCE,
                "-D", "GENERATOR_C=\"{}\"".format(gen_c),
                "-o", exe]
     subprocess.check_output(command)
+    return exe
+
+
+def get_results(exe):
+    print('executing', exe)
+    results = []
+    output = subprocess.check_output([os.path.abspath(exe)])
+    for line in output.split(b'\n'):
+        line = line.strip()
+        if line:
+            name, score = line.split(b': ')
+            score = float(score.decode('utf8'))
+            results.append((name.decode('utf8'), score))
+    results.sort(key=lambda p: p[1])
+    return results
 
 
 def main(jsonfile):
+    # Compile each version.
+    exes = {}
     with open(jsonfile) as f:
         dists = json.load(f)
         for dist in dists:
             write_distribution(dist)
-            compile_driver(dist)
+            exes[dist['name']] = compile_driver(dist)
+
+    # Run each executable.
+    for name, exe in exes.items():
+        results = get_results(exe)
+        print(results)
 
 
 if __name__ == '__main__':
