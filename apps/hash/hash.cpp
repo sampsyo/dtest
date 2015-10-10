@@ -574,8 +574,7 @@ public:
         if (discrete) {
             return distribution(engine);
         } else {
-            //return sample() * uint64_t_max;
-            return sample() * 1000;
+            return sample() * uint64_t_max;
         }
     }
 };
