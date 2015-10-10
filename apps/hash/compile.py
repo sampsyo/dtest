@@ -82,7 +82,7 @@ def get_results(exe):
     return results
 
 
-def main(jsonfile):
+def main(jsonfile, outfile):
     # Compile each version.
     exes = {}
     with open(jsonfile) as f:
@@ -92,10 +92,13 @@ def main(jsonfile):
             exes[dist['name']] = compile_driver(dist)
 
     # Run each executable.
+    results = {}
     for name, exe in exes.items():
-        results = get_results(exe)
-        print(results)
+        results[name] = dict(get_results(exe))
+
+    with open(outfile, 'w') as f:
+        json.dump(results, f, indent=2, sort_keys=True)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1], 'results.json')
