@@ -613,10 +613,8 @@ int main(int argc, const char **argv) {
 
     // Print out probabilities.
     #define PRINT_PROB(NAME, INDEX) \
-        printf(#NAME ": %f\n", \
-            (((float) collisions[INDEX]) / NTESTS) * BUCKETS);
+        printf(#NAME ": %lu\n", collisions[INDEX]);
     FOR_ALL_HASHES(PRINT_PROB);
 
-    printf("OurHash: %f\n",
-        (((float) collisions[NFUNCTIONS - 1]) / NTESTS) * BUCKETS);
+    printf("OurHash: %lu\n", collisions[NFUNCTIONS - 1]);
 }

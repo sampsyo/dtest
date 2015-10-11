@@ -2,6 +2,8 @@ import json
 import sys
 import subprocess
 import os
+import scipy.stats
+import math
 
 
 CODE = {
@@ -30,6 +32,8 @@ Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
 """,
 }
 DRIVER_SOURCE = "hash.cpp"
+BUCKETS = 256
+NTESTS = 1 << 20
 
 
 def c_literal(v):
@@ -82,6 +86,26 @@ def get_results(exe):
     return results
 
 
+def clopper_pearson(x, n, alpha=0.05):
+    """Estimate the confidence interval for a sampled Bernoulli random
+    variable.
+    """
+    b = scipy.stats.beta.ppf
+    lo = b(alpha / 2, x, n - x + 1)
+    hi = b(1 - alpha / 2, x + 1, n - x)
+    return 0.0 if math.isnan(lo) else lo, 1.0 if math.isnan(hi) else hi
+
+
+def counts_to_scores(results):
+    out = {}
+    for dist, res in results.items():
+        out[dist] = dist_out = {}
+        for func, collisions in res.items():
+            min, max = clopper_pearson(collisions, NTESTS)
+            dist_out[func] = min * BUCKETS, max * BUCKETS
+    return out
+
+
 def main(jsonfile, outfile):
     # Compile each version.
     exes = {}
@@ -96,8 +120,10 @@ def main(jsonfile, outfile):
     for name, exe in exes.items():
         results[name] = dict(get_results(exe))
 
+    scores = counts_to_scores(results)
+
     with open(outfile, 'w') as f:
-        json.dump(results, f, indent=2, sort_keys=True)
+        json.dump(scores, f, indent=2, sort_keys=True)
 
 
 if __name__ == '__main__':
