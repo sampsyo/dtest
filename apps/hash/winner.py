@@ -20,4 +20,4 @@ def winner(results_fn, out_fn):
 
 
 if __name__ == '__main__':
-    winner('results.json', 'winners.json')
+    winner('results.json', 'winner.json')

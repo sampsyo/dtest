@@ -17,5 +17,5 @@ results.json: compile.py hash.cpp distributions.json
 hash_%: %.c hash.cpp
 	$(CXX) -o $@ hash.cpp -D GENERATOR_C=\"$<\"
 
-winner.json: results.json winners.py
-	python3 winners.py
+winner.json: results.json winner.py
+	python3 winner.py
