@@ -19,3 +19,7 @@ hash_%: %.c hash.cpp
 
 winner.json: results.json winner.py
 	python3 winner.py
+
+.PHONY: test
+test: test.py data.txt ../apps/hash/distributions.json
+	python3 $^
