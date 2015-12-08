@@ -18,5 +18,9 @@ winner.json: results.json winner.py
 	python3 winner.py
 
 .PHONY: test
-test: test.py data.txt distributions.json
+test: test.py zipcodes.txt distributions.json
+	python3 $^
+
+.PHONY: eval
+eval: eval.py alternatives.json zipcodes.txt
 	python3 $^
