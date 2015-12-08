@@ -11,7 +11,7 @@ NTESTS = 1 << 10
 
 
 def get_result(args, exe='hash', infile='temp.txt'):
-    cmd = [os.path.abspath(exe)] + map(str, args) + [infile]
+    cmd = [os.path.abspath(exe)] + list(map(str, args)) + [infile]
 
     print('executing', cmd)
     output = subprocess.check_output(cmd)
@@ -60,10 +60,10 @@ def main(distributions_json, alternatives_json, outfile):
 
     # Run each configuration on each distribution.
     results = {}
-    for config in configs:
-        results[config['name']] = {}
+    for dist in dists:
+        results[dist['name']] = {}
 
-        for dist in dists:
+        for config in configs:
             # Write the data file.
             data = generate_sample(dist, NTESTS)
             with open('temp.txt', 'w') as f:
@@ -72,7 +72,7 @@ def main(distributions_json, alternatives_json, outfile):
                     f.write('{}\n'.format(int(sample)))
 
             # Invoke the executable.
-            results[config['name']][dist['name']] = \
+            results[dist['name']][config['name']] = \
                 get_result(config['args'])
 
     scores = counts_to_scores(results)

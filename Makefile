@@ -11,8 +11,8 @@ run: $(TARGET)
 clean:
 	rm -f $(TARGET)
 
-results.json: compile.py hash.cpp distributions.json
-	python3 compile.py distributions.json
+results.json: compile.py hash.cpp distributions.json alternatives.json
+	python3 compile.py distributions.json alternatives.json
 
 winner.json: results.json winner.py
 	python3 winner.py
