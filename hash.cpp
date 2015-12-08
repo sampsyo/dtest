@@ -505,116 +505,115 @@ const size_t NFUNCTIONS = 18;
 
 typedef unsigned int hash_func_t(const char *key, size_t len);
 
-template <hash_func_t HF>
-unsigned int bucket_for(uint64_t key) {
-    unsigned int hash = HF((const char *)&key, sizeof(key));
+unsigned int bucket_for(hash_func_t *hf, uint64_t key) {
+    unsigned int hash = hf((const char *)&key, sizeof(key));
     return hash % BUCKETS;
 }
 
-template <hash_func_t HF>
-bool collide(uint64_t key1, uint64_t key2) {
-    unsigned int bucket1 = bucket_for<HF>(key1);
-    unsigned int bucket2 = bucket_for<HF>(key2);
+bool collide(hash_func_t *hf, uint64_t key1, uint64_t key2) {
+    unsigned int bucket1 = bucket_for(hf, key1);
+    unsigned int bucket2 = bucket_for(hf, key2);
     return bucket1 == bucket2;
 }
 
 #define FOR_ALL_HASHES(MACRO) \
-    MACRO(HashBernstein, 0); \
-    MACRO(HashLarson, 1); \
-    MACRO(HashKernighanRitchie, 3); \
-    MACRO(Hash17_unrolled, 4); \
-    MACRO(Hash17, 5); \
-    MACRO(Hash65599, 6); \
-    MACRO(HashFNV1a, 7); \
-    MACRO(HashWeinberger, 8); \
-    MACRO(HashRamakrishna, 9); \
-    MACRO(HashFletcher, 10); \
-    MACRO(HashMurmur2, 11); \
-    MACRO(HashPaulHsieh, 12); \
-    MACRO(HashOneAtTime, 13); \
-    MACRO(HashArashPartow, 14); \
-    MACRO(HashUniversal, 15); \
-    MACRO(HashLookup3, 16);
 
 unsigned int our_hash(uint64_t key) {
     return 734507 * key + 58578;
 }
 
+unsigned int our_hash_func(const char *key, size_t len) {
+    return our_hash(*((uint64_t *)key));
+}
 
-// TODO make these not globals!
-const uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max();
-
-template <typename Dist>
-class Generator {
-public:
-    std::default_random_engine &engine;
-    Dist distribution;
-    bool discrete;
-
-    Generator(std::default_random_engine &eng,
-              Dist dist,
-              bool disc) :
-        engine(eng),
-        distribution(dist),
-        discrete(disc) // One day, let's eliminate this.
-    {};
-
-    // Limit the distribution to the range [0.0, 1.0].
-    double sample() {
-        for (;;) {
-            double val = distribution(engine);
-            if (val >= 0.0 && val < 1.0) {
-                return val;
-            }
-        }
-    }
-
-    // Scale a sample to the range of 64-bit unsigned integers.
-    uint64_t operator()() {
-        if (discrete) {
-            return distribution(engine);
-        } else {
-            return sample() * uint64_t_max;
-        }
-    }
-};
 
 int main(int argc, const char **argv) {
-    size_t collisions[NFUNCTIONS];
-    memset(collisions, 0, sizeof(collisions));
+    const char *hf_index_str = argv[1];
+    const char *data_filename = argv[2];
 
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine engine(seed);
-
-#ifdef GENERATOR_C
-#include GENERATOR_C
-#else
-    std::normal_distribution<double> distribution(0.0, 1.0);
-    Generator< std::normal_distribution<double> > gen(engine, distribution,
-            false);
-#endif
-
-    // Hash some keys.
-    for (int i = 0; i < NTESTS; ++i) {
-        uint64_t key1 = gen();
-        uint64_t key2 = gen();
-
-        #define COLLIDE(NAME, INDEX) \
-            if (collide<NAME>(key1, key2)) { \
-                ++collisions[INDEX]; \
-            }
-        FOR_ALL_HASHES(COLLIDE);
-
-        if (our_hash(key1) % 251 == our_hash(key2) % 251) {
-            // printf("%u %llu %llu\n", our_hash(key1) % 251, key1, key2);
-            ++collisions[NFUNCTIONS - 1];
-        }
+    int hf_index = atoi(hf_index_str);
+    hash_func_t *hf;
+    switch (hf_index) {
+    case 0:
+        hf = HashBernstein;
+        break;
+    case 1:
+        hf = HashLarson;
+        break;
+    case 2:
+        hf = HashKernighanRitchie;
+        break;
+    case 3:
+        hf = Hash17_unrolled;
+        break;
+    case 4:
+        hf = Hash17;
+        break;
+    case 5:
+        hf = Hash65599;
+        break;
+    case 6:
+        hf = HashFNV1a;
+        break;
+    case 7:
+        hf = HashWeinberger;
+        break;
+    case 8:
+        hf = HashRamakrishna;
+        break;
+    case 9:
+        hf = HashFletcher;
+        break;
+    case 10:
+        hf = HashMurmur2;
+        break;
+    case 11:
+        hf = HashPaulHsieh;
+        break;
+    case 12:
+        hf = HashOneAtTime;
+        break;
+    case 13:
+        hf = HashArashPartow;
+        break;
+    case 14:
+        hf = HashUniversal;
+        break;
+    case 15:
+        hf = HashLookup3;
+        break;
+    case 16:
+        hf = our_hash_func;
+        break;
+    default:
+        printf("unrecognized index!\n");
+        return -1;
     }
 
-    // Print out probabilities.
-    #define PRINT_PROB(NAME, INDEX) \
-        printf(#NAME ": %lu\n", collisions[INDEX]);
-    FOR_ALL_HASHES(PRINT_PROB);
+    FILE *f = fopen(data_filename, "r");
 
-    printf("OurHash: %lu\n", collisions[NFUNCTIONS - 1]);
+    // Hash some keys.
+    uint64_t collisions = 0;
+    uint64_t count = 0;
+    for (;;) {
+        uint64_t key1, key2;
+        int status = fscanf(f, "%llu\n", &key1);
+        if (status == EOF) {
+            break;
+        }
+        status = fscanf(f, "%llu\n", &key2);
+        if (status == EOF) {
+            break;
+        }
+
+        if (collide(hf, key1, key2)) {
+            ++collisions;
+        }
+        ++count;
+    }
+
+    fclose(f);
+
+    // Print out probability.
+    printf("%llu %llu\n", collisions, count);
 }
