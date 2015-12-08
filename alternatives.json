@@ -9,62 +9,62 @@
     },
     {
         "name": "HashKernighanRitchie",
-        "args": [3]
+        "args": [2]
     },
     {
         "name": "Hash17_unrolled",
-        "args": [4]
+        "args": [3]
     },
     {
         "name": "Hash17",
-        "args": [5]
+        "args": [4]
     },
     {
         "name": "Hash65599",
-        "args": [6]
+        "args": [5]
     },
     {
         "name": "HashFNV1a",
-        "args": [7]
+        "args": [6]
     },
     {
         "name": "HashWeinberger",
-        "args": [8]
+        "args": [7]
     },
     {
         "name": "HashRamakrishna",
-        "args": [9]
+        "args": [8]
     },
     {
         "name": "HashFletcher",
-        "args": [10]
+        "args": [9]
     },
     {
         "name": "HashMurmur2",
-        "args": [11]
+        "args": [10]
     },
     {
         "name": "HashPaulHsieh",
-        "args": [12]
+        "args": [11]
     },
     {
         "name": "HashOneAtTime",
-        "args": [13]
+        "args": [12]
     },
     {
         "name": "HashArashPartow",
-        "args": [14]
+        "args": [13]
     },
     {
         "name": "HashUniversal",
-        "args": [15]
+        "args": [14]
     },
     {
         "name": "HashLookup3",
-        "args": [16]
+        "args": [15]
     },
     {
         "name": "ourhash",
-        "args": [17]
+        "args": [16]
     }
 ]

@@ -7,7 +7,7 @@ import math
 import distributions
 
 BUCKETS = 256
-NTESTS = 1 << 20
+NTESTS = 1 << 10
 
 
 def get_result(args, exe='hash', infile='temp.txt'):
@@ -68,7 +68,8 @@ def main(distributions_json, alternatives_json, outfile):
             data = generate_sample(dist, NTESTS)
             with open('temp.txt', 'w') as f:
                 for sample in data:
-                    f.write('{}\n'.format(sample))
+                    # FIXME integers!
+                    f.write('{}\n'.format(int(sample)))
 
             # Invoke the executable.
             results[config['name']][dist['name']] = \
