@@ -4,86 +4,20 @@ import subprocess
 import os
 import scipy.stats
 import math
+import distributions
 
-
-CODE = {
-    'normal': """
-std::normal_distribution<double> distribution({mean}, {variance});
-Generator< std::normal_distribution<double> > gen(engine, distribution,
-        false);
-""",
-    'poisson': """
-std::poisson_distribution<uint64_t> distribution({mean});
-Generator< std::poisson_distribution<uint64_t> > gen(engine,
-        distribution, true);
-""",
-    'piecewise_constant': """
-std::array<double, 3> intervals = {intervals};
-std::array<double, 2> weights = {weights};
-std::piecewise_constant_distribution<double> distribution
-    (intervals.begin(), intervals.end(), weights.begin());
-Generator< std::piecewise_constant_distribution<double> > gen(engine,
-        distribution, false);
-""",
-    'uniform': """
-std::uniform_int_distribution<uint64_t> distribution({min}, {max});
-Generator< std::uniform_int_distribution<uint64_t> > gen(engine,
-        distribution, true);
-""",
-}
-DRIVER_SOURCE = "hash.cpp"
 BUCKETS = 256
 NTESTS = 1 << 20
 
 
-def c_literal(v):
-    if isinstance(v, list):
-        s = str(v)
-        return '{' + s[1:-1] + '}'
-    else:
-        return v
+def get_result(args, exe='hash', infile='temp.txt'):
+    cmd = [os.path.abspath(exe)] + map(str, args) + [infile]
 
+    print('executing', cmd)
+    output = subprocess.check_output(cmd)
 
-def emit_distribution(dist):
-    code = CODE[dist['kind']]
-    values = {k: c_literal(v) for k, v in dist.items()}
-    return code.format(**values).strip()
-
-
-def generator_c(dist):
-    return '{}.c'.format(dist['name'])
-
-
-def write_distribution(dist):
-    c = emit_distribution(dist)
-    fn = generator_c(dist)
-    with open(fn, 'w') as f:
-        f.write(c)
-
-
-def compile_driver(dist):
-    gen_c = generator_c(dist)
-    exe = 'hash_{}'.format(dist['name'])
-    print('compiling', exe)
-    command = ["c++", DRIVER_SOURCE,
-               "-D", "GENERATOR_C=\"{}\"".format(gen_c),
-               "-o", exe]
-    subprocess.check_output(command)
-    return exe
-
-
-def get_results(exe):
-    print('executing', exe)
-    results = []
-    output = subprocess.check_output([os.path.abspath(exe)])
-    for line in output.split(b'\n'):
-        line = line.strip()
-        if line:
-            name, score = line.split(b': ')
-            score = float(score.decode('utf8'))
-            results.append((name.decode('utf8'), score))
-    results.sort(key=lambda p: p[1])
-    return results
+    parts = output.split()
+    return int(parts[0])
 
 
 def clopper_pearson(x, n, alpha=0.05):
@@ -107,19 +41,38 @@ def counts_to_scores(results):
     return out
 
 
-def main(jsonfile, outfile):
-    # Compile each version.
-    exes = {}
-    with open(jsonfile) as f:
-        dists = json.load(f)
-        for dist in dists:
-            write_distribution(dist)
-            exes[dist['name']] = compile_driver(dist)
+def generate_sample(dist, count):
+    func = distributions.GEN_FUNCTIONS[dist['kind']]
+    args = {k: v for k, v in dist.items() if k not in ('name', 'kind')}
+    args['count'] = count
+    return func(**args)
 
-    # Run each executable.
+
+def main(distributions_json, alternatives_json, outfile):
+    # Get the distributions to generate.
+    with open(distributions_json) as f:
+        dists = json.load(f)
+
+    # Get the configurations to test.
+    configs = {}
+    with open(alternatives_json) as f:
+        configs = json.load(f)
+
+    # Run each configuration on each distribution.
     results = {}
-    for name, exe in exes.items():
-        results[name] = dict(get_results(exe))
+    for config in configs:
+        results[config['name']] = {}
+
+        for dist in dists:
+            # Write the data file.
+            data = generate_sample(dist, NTESTS)
+            with open('temp.txt', 'w') as f:
+                for sample in data:
+                    f.write('{}\n'.format(sample))
+
+            # Invoke the executable.
+            results[config['name']][dist['name']] = \
+                get_result(config['args'])
 
     scores = counts_to_scores(results)
 
@@ -128,4 +81,4 @@ def main(jsonfile, outfile):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], 'results.json')
+    main(sys.argv[1], sys.argv[2], 'results.json')

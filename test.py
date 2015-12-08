@@ -10,19 +10,19 @@ NUM_TESTS = 10
 def test_normal(data, mean, variance):
     if len(data) > 10 ** 10:
         print('that is a lot of data!')
-    synthetic = numpy.random.normal(mean, variance, len(data))
+    synthetic = distributions.normal(mean, variance, len(data))
     _, p = ks_2samp(synthetic, data)
     return p
 
 
 def test_poisson(data, mean):
-    synthetic = numpy.random.poisson(mean, len(data))
+    synthetic = distributions.poisson(mean, len(data))
     _, p = ks_2samp(synthetic, data)
     return p
 
 
 def test_uniform(data, min, max):
-    synthetic = numpy.random.uniform(min, max, len(data))
+    synthetic = distributions.uniform(min, max, len(data))
     _, p = ks_2samp(synthetic, data)
     return p
 

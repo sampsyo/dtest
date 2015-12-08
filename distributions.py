@@ -23,3 +23,23 @@ def piecewise_constant(intervals, weights, count):
         synthetic.append(numpy.random.uniform(lo, hi))
 
     return synthetic
+
+
+def normal(mean, variance, count):
+    return numpy.random.normal(mean, variance, count)
+
+
+def poisson(mean, count):
+    return numpy.random.poisson(mean, count)
+
+
+def uniform(min, max, count):
+    return numpy.random.uniform(min, max, count)
+
+
+GEN_FUNCTIONS = {
+    'normal': normal,
+    'poisson': poisson,
+    'uniform': uniform,
+    'piecewise_constant': piecewise_constant,
+}
