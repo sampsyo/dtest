@@ -3,7 +3,7 @@ import sys
 import compile
 
 
-def main(alternatives_json, data_filename):
+def main(alternatives_json, data_filename, out_filename):
     with open(alternatives_json) as f:
         configs = json.load(f)
 
@@ -12,8 +12,10 @@ def main(alternatives_json, data_filename):
         res = compile.get_result(config['args'], infile=data_filename)
         results[config['name']] = res
 
-    print(json.dumps(results, sort_keys=True, indent=2))
+#    print(json.dumps(results, sort_keys=True, indent=2))
+    with open(out_filename, 'w') as f:
+        json.dump(results, f, sort_keys=True, indent=2)
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    main(*sys.argv[1:], 'datascores.json')

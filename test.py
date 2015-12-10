@@ -77,7 +77,17 @@ def dict_max(d):
     return max_key
 
 
-def main(data_filename, dists_filename):
+def dict_min(d):
+    min_key = None
+    min_value = None
+    for k, v in d.items():
+        if min_key is None or v < min_value:
+            min_key = k
+            min_value = v
+    return min_key
+
+
+def main(data_filename, dists_filename, out_filename):
     data = numpy.loadtxt(data_filename)
 
     with open(dists_filename) as dists_file:
@@ -88,8 +98,10 @@ def main(data_filename, dists_filename):
         scores_samples.append(get_scores(data, dists))
 
     scores_avg = dict_average(scores_samples)
-    print(dict_max(scores_avg))
+#    print(dict_max(scores_avg))
+    with open(out_filename, 'w') as f:
+        json.dump(scores_avg, f)
 
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    main(*sys.argv[1:], 'distsims.json')

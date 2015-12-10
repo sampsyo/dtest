@@ -516,6 +516,7 @@ bool collide(hash_func_t *hf, uint64_t key1, uint64_t key2) {
     return bucket1 == bucket2;
 }
 
+
 #define FOR_ALL_HASHES(MACRO) \
 
 unsigned int our_hash(uint64_t key) {
@@ -590,10 +591,14 @@ int main(int argc, const char **argv) {
         return -1;
     }
 
+    uint64_t bucket_counts[BUCKETS];
+    for(int i = 0; i < BUCKETS; i++){
+        bucket_counts[i] = 0;
+    }
+
     FILE *f = fopen(data_filename, "r");
 
     // Hash some keys.
-    uint64_t collisions = 0;
     uint64_t count = 0;
     for (;;) {
         uint64_t key1, key2;
@@ -601,19 +606,19 @@ int main(int argc, const char **argv) {
         if (status == EOF) {
             break;
         }
-        status = fscanf(f, "%llu\n", &key2);
-        if (status == EOF) {
-            break;
-        }
 
-        if (collide(hf, key1, key2)) {
-            ++collisions;
-        }
+        bucket_counts[bucket_for(hf,key1)]++;
         ++count;
     }
 
     fclose(f);
 
     // Print out probability.
-    printf("%llu %llu\n", collisions, count);
+    uint64_t max_val = 0;
+    for(int i = 0; i < BUCKETS; i++){
+        if (max_val < bucket_counts[i]){
+            max_val = bucket_counts[i];
+        }
+    }
+    printf("%llu %llu\n", max_val, count);
 }
