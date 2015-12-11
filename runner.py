@@ -1,11 +1,11 @@
-import compile
+import drive
 import json
 import eval
 import winner
 import test
 
 # determine the recommended alternative
-compile.main('distributions.json', 'alternatives.json', 'results.json')
+drive.main('distributions.json', 'alternatives.json', 'results.json')
 winner.winner('results.json', 'winner.json')
 test.main('data/zipcodes.txt', 'distributions.json', 'distsims.json')
 
