@@ -9,7 +9,7 @@ run: $(TARGET)
 
 .PHONY: clean
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) results.json winner.json temp.txt
 
 results.json: compile.py hash.cpp distributions.json alternatives.json
 	python3 compile.py distributions.json alternatives.json

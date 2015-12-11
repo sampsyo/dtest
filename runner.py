@@ -7,10 +7,10 @@ import test
 # determine the recommended alternative
 compile.main('distributions.json', 'alternatives.json', 'results.json')
 winner.winner('results.json', 'winner.json')
-test.main('zipcodes.txt', 'distributions.json', 'distsims.json')
+test.main('data/zipcodes.txt', 'distributions.json', 'distsims.json')
 
 # find the ideal alternative
-eval.main('alternatives.json', 'zipcodes.txt', 'datascores.json')
+eval.main('alternatives.json', 'data/zipcodes.txt', 'datascores.json')
 
 
 # determine the winner's score on zipcodes
