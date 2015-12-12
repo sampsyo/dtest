@@ -1,7 +1,6 @@
 import json
 import os
 from . import drive
-from . import eval
 from . import paramselect
 from . import test
 
@@ -19,6 +18,20 @@ DATA_QUALITY = 'data_quality.json'
 def load_json(filename):
     with open(filename) as f:
         return json.load(f)
+
+
+def get_data_quality(alternatives_json, data_filename, out_filename, command):
+    with open(alternatives_json) as f:
+        configs = json.load(f)
+
+    results = {}
+    for config in configs:
+        res = drive.get_result(config['args'], command, infile=data_filename)
+        results[config['name']] = res
+
+#    print(json.dumps(results, sort_keys=True, indent=2))
+    with open(out_filename, 'w') as f:
+        json.dump(results, f, sort_keys=True, indent=2)
 
 
 # determine the winner's score on zipcodes
@@ -41,16 +54,16 @@ def run(appdir):
     test.model_score(input_filename, distributions_json, MODEL_SCORES)
 
     # find the ideal alternative
-    eval.main(alternatives_json, input_filename, DATA_QUALITY, command)
+    get_data_quality(alternatives_json, input_filename, DATA_QUALITY, command)
 
     closest_dist = test.dict_max(load_json(MODEL_SCORES))
 
     recommended_alt = load_json(PARAMETER_SELECTIONS)[closest_dist]
 
-    datascores = load_json(DATA_QUALITY)
-    best_alt = test.dict_min(datascores)
-    best_score = datascores[best_alt]
-    rec_score = datascores[recommended_alt]
+    data_quality = load_json(DATA_QUALITY)
+    best_alt = test.dict_min(data_quality)
+    best_score = data_quality[best_alt]
+    rec_score = data_quality[recommended_alt]
 
     print("\nrecommended =          ", recommended_alt,
           "\nrec max bucket size =  ", rec_score,
