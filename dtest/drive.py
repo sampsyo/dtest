@@ -48,7 +48,7 @@ def generate_sample(dist, count):
     return func(**args)
 
 
-def main(distributions_json, alternatives_json, outfile):
+def main(distributions_json, alternatives_json, outfile, command):
     # Get the distributions to generate.
     with open(distributions_json) as f:
         dists = json.load(f)
@@ -73,7 +73,7 @@ def main(distributions_json, alternatives_json, outfile):
 
             # Invoke the executable.
             results[dist['name']][config['name']] = \
-                get_result(config['args'])
+                get_result(config['args'], command)
 
     scores = counts_to_scores(results)
 
