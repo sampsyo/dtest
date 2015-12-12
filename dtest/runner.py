@@ -1,8 +1,8 @@
-import drive
 import json
-import eval
-import winner
-import test
+from . import drive
+from . import eval
+from . import winner
+from . import test
 
 # determine the recommended alternative
 drive.main('distributions.json', 'alternatives.json', 'results.json')

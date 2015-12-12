@@ -4,7 +4,7 @@ import subprocess
 import os
 import scipy.stats
 import math
-import distributions
+from . import distributions
 
 BUCKETS = 256
 NTESTS = 1 << 10

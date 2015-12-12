@@ -1,6 +1,5 @@
 import json
-import sys
-import compile
+from . import drive
 
 
 def main(alternatives_json, data_filename, out_filename):
@@ -9,13 +8,9 @@ def main(alternatives_json, data_filename, out_filename):
 
     results = {}
     for config in configs:
-        res = compile.get_result(config['args'], infile=data_filename)
+        res = drive.get_result(config['args'], infile=data_filename)
         results[config['name']] = res
 
 #    print(json.dumps(results, sort_keys=True, indent=2))
     with open(out_filename, 'w') as f:
         json.dump(results, f, sort_keys=True, indent=2)
-
-
-if __name__ == '__main__':
-    main(*sys.argv[1:], 'datascores.json')

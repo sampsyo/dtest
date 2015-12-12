@@ -2,7 +2,7 @@ from scipy.stats import ks_2samp
 import numpy
 import sys
 import json
-import distributions
+from . import distributions
 
 NUM_TESTS = 10
 
