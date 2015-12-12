@@ -1,26 +1,7 @@
-TARGET := hash
-
-$(TARGET): hash.cpp
-	$(CXX) -o $@ $^
-
-.PHONY: run
-run: $(TARGET)
-	./$(TARGET)
-
 .PHONY: clean
 clean:
-	rm -f $(TARGET) results.json winner.json temp.txt
+	rm -f results.json winner.json temp.txt datascores.json distsims.json
 
-results.json: compile.py hash.cpp distributions.json alternatives.json
-	python3 compile.py distributions.json alternatives.json
-
-winner.json: results.json winner.py
-	python3 winner.py
-
-.PHONY: test
-test: test.py zipcodes.txt distributions.json
-	python3 $^
-
-.PHONY: eval
-eval: eval.py alternatives.json zipcodes.txt
-	python3 $^
+.PHONY: dtest
+dtest:
+	python3 -m $@ hash
