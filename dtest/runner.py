@@ -10,6 +10,13 @@ DISTRIBUTIONS_JSON = 'distributions.json'
 ALTERNATIVES_JSON = 'alternatives.json'
 CONFIG_JSON = 'config.json'
 
+MODEL_SCORES = 'model_scores.json'
+
+
+def load_json(filename):
+    with open(filename) as f:
+        return json.load(f)
+
 
 # determine the winner's score on zipcodes
 def run(appdir):
@@ -28,22 +35,19 @@ def run(appdir):
     drive.main(distributions_json, alternatives_json, 'results.json',
                command)
     winner.winner('results.json', 'winner.json')
-    test.main(input_filename, distributions_json, 'distsims.json')
+    test.model_score(input_filename, distributions_json, MODEL_SCORES)
 
     # find the ideal alternative
     eval.main(alternatives_json, input_filename, 'datascores.json', command)
 
-    with open('distsims.json') as f:
-        closest_dist = test.dict_max(json.load(f))
+    closest_dist = test.dict_max(load_json(MODEL_SCORES))
 
-    with open('winner.json') as f:
-        recommended_alt = json.load(f)[closest_dist]
+    recommended_alt = load_json('winner.json')[closest_dist]
 
-    with open('datascores.json') as f:
-        datascores = json.load(f)
-        best_alt = test.dict_min(datascores)
-        best_score = datascores[best_alt]
-        rec_score = datascores[recommended_alt]
+    datascores = load_json('datascores.json')
+    best_alt = test.dict_min(datascores)
+    best_score = datascores[best_alt]
+    rec_score = datascores[recommended_alt]
 
     print("\nrecommended =          ", recommended_alt,
           "\nrec max bucket size =  ", rec_score,

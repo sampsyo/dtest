@@ -87,7 +87,7 @@ def dict_min(d):
     return min_key
 
 
-def main(data_filename, dists_filename, out_filename):
+def model_score(data_filename, dists_filename, out_filename):
     data = numpy.loadtxt(data_filename)
 
     with open(dists_filename) as dists_file:
@@ -101,7 +101,3 @@ def main(data_filename, dists_filename, out_filename):
 #    print(dict_max(scores_avg))
     with open(out_filename, 'w') as f:
         json.dump(scores_avg, f)
-
-
-if __name__ == '__main__':
-    main(*sys.argv[1:], 'distsims.json')
