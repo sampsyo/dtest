@@ -1,5 +1,6 @@
 import json
 import os
+import heapq
 from . import drive
 from . import paramselect
 from . import test
@@ -18,6 +19,31 @@ DATA_QUALITY = 'data_quality.json'
 def load_json(filename):
     with open(filename) as f:
         return json.load(f)
+
+
+def dict_min(d):
+    min_key = None
+    min_value = None
+    for k, v in d.items():
+        if min_key is None or v < min_value:
+            min_key = k
+            min_value = v
+    return min_key
+
+
+def dict_min_all(d):
+    heap = [(v, k) for (k, v) in d.items()]
+    heapq.heapify(heap)
+
+    min_v = None
+    for v, k in heap:
+        if min_v is None:
+            min_v = v
+            yield k
+        elif v == min_v:
+            yield k
+        else:
+            break
 
 
 def get_data_quality(alternatives_json, data_filename, out_filename, command):
@@ -61,11 +87,11 @@ def run(appdir):
     recommended_alt = load_json(PARAMETER_SELECTIONS)[closest_dist]
 
     data_quality = load_json(DATA_QUALITY)
-    best_alt = test.dict_min(data_quality)
-    best_score = data_quality[best_alt]
+    best_alts = list(dict_min_all(data_quality))
+    best_scores = [data_quality[a] for a in best_alts]
     rec_score = data_quality[recommended_alt]
 
     print("\nrecommended =          ", recommended_alt,
           "\nrec max bucket size =  ", rec_score,
-          "\nbest =                 ", best_alt,
-          "\nbest max bucket size = ", best_score)
+          "\nbest =                 ", best_alts,
+          "\nbest max bucket size = ", best_scores)

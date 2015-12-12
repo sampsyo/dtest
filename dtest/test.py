@@ -77,16 +77,6 @@ def dict_max(d):
     return max_key
 
 
-def dict_min(d):
-    min_key = None
-    min_value = None
-    for k, v in d.items():
-        if min_key is None or v < min_value:
-            min_key = k
-            min_value = v
-    return min_key
-
-
 def model_score(data_filename, dists_filename, out_filename):
     data = numpy.loadtxt(data_filename)
 
