@@ -12,6 +12,8 @@ CONFIG_JSON = 'config.json'
 
 MODEL_SCORES = 'model_scores.json'
 PARAMETER_SELECTIONS = 'param_selections.json'
+MODEL_QUALITY = 'model_quality.json'
+DATA_QUALITY = 'data_quality.json'
 
 
 def load_json(filename):
@@ -33,19 +35,19 @@ def run(appdir):
     command = os.path.join(appdir, config['command'])
 
     # determine the recommended alternative
-    drive.main(distributions_json, alternatives_json, 'results.json',
+    drive.main(distributions_json, alternatives_json, MODEL_QUALITY,
                command)
-    paramselect.parameter_selections('results.json', PARAMETER_SELECTIONS)
+    paramselect.parameter_selections(MODEL_QUALITY, PARAMETER_SELECTIONS)
     test.model_score(input_filename, distributions_json, MODEL_SCORES)
 
     # find the ideal alternative
-    eval.main(alternatives_json, input_filename, 'datascores.json', command)
+    eval.main(alternatives_json, input_filename, DATA_QUALITY, command)
 
     closest_dist = test.dict_max(load_json(MODEL_SCORES))
 
     recommended_alt = load_json(PARAMETER_SELECTIONS)[closest_dist]
 
-    datascores = load_json('datascores.json')
+    datascores = load_json(DATA_QUALITY)
     best_alt = test.dict_min(datascores)
     best_score = datascores[best_alt]
     rec_score = datascores[recommended_alt]
