@@ -1,7 +1,7 @@
 import json
 
 
-def winner(results_fn, out_fn):
+def parameter_selections(results_fn, out_fn):
     with open(results_fn) as f:
         results = json.load(f)
 

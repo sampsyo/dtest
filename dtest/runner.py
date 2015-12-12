@@ -2,7 +2,7 @@ import json
 import os
 from . import drive
 from . import eval
-from . import winner
+from . import paramselect
 from . import test
 
 # Input files to be found in the application's base directory.
@@ -11,6 +11,7 @@ ALTERNATIVES_JSON = 'alternatives.json'
 CONFIG_JSON = 'config.json'
 
 MODEL_SCORES = 'model_scores.json'
+PARAMETER_SELECTIONS = 'param_selections.json'
 
 
 def load_json(filename):
@@ -34,7 +35,7 @@ def run(appdir):
     # determine the recommended alternative
     drive.main(distributions_json, alternatives_json, 'results.json',
                command)
-    winner.winner('results.json', 'winner.json')
+    paramselect.parameter_selections('results.json', PARAMETER_SELECTIONS)
     test.model_score(input_filename, distributions_json, MODEL_SCORES)
 
     # find the ideal alternative
@@ -42,7 +43,7 @@ def run(appdir):
 
     closest_dist = test.dict_max(load_json(MODEL_SCORES))
 
-    recommended_alt = load_json('winner.json')[closest_dist]
+    recommended_alt = load_json(PARAMETER_SELECTIONS)[closest_dist]
 
     datascores = load_json('datascores.json')
     best_alt = test.dict_min(datascores)
