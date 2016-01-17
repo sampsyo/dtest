@@ -1,4 +1,6 @@
+from __future__ import division
 import numpy
+import math
 
 
 def piecewise_constant(intervals, weights, count):
@@ -37,9 +39,23 @@ def uniform(min, max, count):
     return numpy.random.uniform(min, max, count)
 
 
+def bitvec(bits, entropy, count):
+    shorts = math.ceil(bits / 16)
+    exponent = math.ceil(entropy / shorts)
+
+    out = []
+    for i in range(count):
+        vec = []
+        for j in range(shorts):
+            vec.append(numpy.random.randint(0, 2 ** exponent))
+        out.append(vec)
+    return out
+
+
 GEN_FUNCTIONS = {
     'normal': normal,
     'poisson': poisson,
     'uniform': uniform,
     'piecewise_constant': piecewise_constant,
+    'bitvec': bitvec,
 }

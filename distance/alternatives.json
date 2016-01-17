@@ -1,0 +1,14 @@
+[
+    {
+        "name": "naive",
+        "args": [0]
+    },
+    {
+        "name": "random",
+        "args": [1]
+    },
+    {
+        "name": "balanced",
+        "args": [2]
+    }
+}

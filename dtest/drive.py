@@ -68,8 +68,12 @@ def main(distributions_json, alternatives_json, outfile, command):
             data = generate_sample(dist, NTESTS)
             with open('temp.txt', 'w') as f:
                 for sample in data:
-                    # FIXME integers!
-                    f.write('{}\n'.format(int(sample)))
+                    if isinstance(sample, list):
+                        # For bit vectors.
+                        f.write(' '.join(str(i).zfill(5) for i in sample))
+                    else:
+                        # FIXME integers!
+                        f.write('{}\n'.format(int(sample)))
 
             # Invoke the executable.
             results[dist['name']][config['name']] = \

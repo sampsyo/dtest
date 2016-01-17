@@ -1,7 +1,9 @@
+from __future__ import division
 from scipy.stats import ks_2samp
 import numpy
-import sys
 import json
+import collections
+import math
 from . import distributions
 
 NUM_TESTS = 10
@@ -33,11 +35,32 @@ def test_piecewise_constant(data, intervals, weights):
     return p
 
 
+def entropy(counts):
+    total = sum(counts.values())
+    ent = 0.0
+    for key, count in counts.items():
+        p = count / total
+        ent += p * math.log(1 / p)
+    return ent
+
+
+def test_bitvec(data, bits, entropy):
+    shorts = len(data[0])
+
+    min_entropy = bits
+    for i in range(shorts):
+        counter = collections.Counter(v[i] for v in data)
+        min_entropy = min(min_entropy, entropy(counter))
+
+    return abs(min_entropy - entropy) / bits
+
+
 TEST_FUNCTIONS = {
     'normal': test_normal,
     'poisson': test_poisson,
     'uniform': test_uniform,
     'piecewise_constant': test_piecewise_constant,
+    'bitvec': test_bitvec,
 }
 
 
