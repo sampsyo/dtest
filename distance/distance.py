@@ -26,7 +26,7 @@ def chunkify(stream, size):
 
 
 def main(mode, filename):
-    data = chunkify(read_vectors(filename), 8)
+    data = list(chunkify(read_vectors(filename), 8))
 
     if mode != 0:
         data = shuffle_driver(data, mode == 1)
@@ -34,7 +34,7 @@ def main(mode, filename):
     # Get the maximum subcube size for each dimension.
     max_subcube_sizes = []
     for index in range(8):
-        column = (data[i * 8 + index] for i in range(len(data) // 8))
+        column = (vec[index] for vec in data)
         counter = collections.Counter(column)
         _, count = counter.most_common(1)[0]
         max_subcube_sizes.append(count)
@@ -74,4 +74,4 @@ def shuffle_vec(vec, masks):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(int(sys.argv[1]), sys.argv[2])
