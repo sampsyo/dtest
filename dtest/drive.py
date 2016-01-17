@@ -70,7 +70,8 @@ def main(distributions_json, alternatives_json, outfile, command):
                 for sample in data:
                     if isinstance(sample, list):
                         # For bit vectors.
-                        f.write(' '.join(str(i).zfill(5) for i in sample))
+                        f.write(' '.join(str(i).zfill(5) for i in sample)
+                                + ' ')
                     else:
                         # FIXME integers!
                         f.write('{}\n'.format(int(sample)))
