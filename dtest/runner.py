@@ -91,7 +91,7 @@ def run(appdir):
     best_scores = [data_quality[a] for a in best_alts]
     rec_score = data_quality[recommended_alt]
 
-    print("\nrecommended =          ", recommended_alt,
-          "\nrec max bucket size =  ", rec_score,
-          "\nbest =                 ", best_alts,
-          "\nbest max bucket size = ", best_scores)
+    print("\nrecommended = ", recommended_alt,
+          "\nrec score =   ", rec_score,
+          "\nbest          ", best_alts,
+          "\nbest score =  ", best_scores)

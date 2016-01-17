@@ -35,7 +35,7 @@ def test_piecewise_constant(data, intervals, weights):
     return p
 
 
-def entropy(counts):
+def _entropy(counts):
     total = sum(counts.values())
     ent = 0.0
     for key, count in counts.items():
@@ -44,13 +44,22 @@ def entropy(counts):
     return ent
 
 
+def chunkify(stream, size):
+    cur_chunk = []
+    for v in stream:
+        cur_chunk.append(v)
+        if len(cur_chunk) >= size:
+            yield cur_chunk
+        cur_chunk = []
+
+
 def test_bitvec(data, bits, entropy):
     shorts = bits // 16
 
     min_entropy = bits
     for i in range(shorts):
-        counter = collections.Counter(v[i] for v in data)
-        min_entropy = min(min_entropy, entropy(counter))
+        counter = collections.Counter(v[i] for v in chunkify(data, shorts))
+        min_entropy = min(min_entropy, _entropy(counter))
 
     return abs(min_entropy - entropy) / bits
 
