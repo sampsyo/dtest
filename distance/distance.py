@@ -21,9 +21,9 @@ def main(mode, filename):
     # Get the maximum subcube size for each dimension.
     max_subcube_sizes = []
     for index in range(8):
-        column = data[i * 8 + index] for i in range(len(data) / 8)
+        column = (data[i * 8 + index] for i in range(len(data) // 8))
         counter = collections.Counter(column)
-        _, count = counter.most_common(1)
+        _, count = counter.most_common(1)[0]
         max_subcube_sizes.append(count)
 
     print(max(max_subcube_sizes))
