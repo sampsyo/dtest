@@ -50,7 +50,7 @@ def chunkify(stream, size):
         cur_chunk.append(v)
         if len(cur_chunk) >= size:
             yield cur_chunk
-        cur_chunk = []
+            cur_chunk = []
 
 
 def test_bitvec(data, bits, entropy):
