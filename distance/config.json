@@ -1,4 +1,4 @@
 {
-    "input": "../data/zipcodes.txt",
-    "command": "distance"
+    "input": "binary_vecs.uints16t.txt",
+    "command": "distance.py"
 }

@@ -45,7 +45,7 @@ def entropy(counts):
 
 
 def test_bitvec(data, bits, entropy):
-    shorts = len(data[0])
+    shorts = bits // 16
 
     min_entropy = bits
     for i in range(shorts):
