@@ -1,5 +1,5 @@
 bib: dtest
-title: Enforcing Statistical Quality Properties
+title: Dynamically Enforcing Statistical Quality Properties
 sysname: `dtest`
 
 [TITLE]
@@ -16,6 +16,10 @@ For example, consider an application that uses machine learning to classify imag
 Intuitively, the system designer wants the algorithm to produce correct classifications, but it is impossible to require that it be correct *every time*.
 Instead, quality for this application is an aggregate, statistical property: the application succeeds if it classifies images *with high probability* in aggregate over many images.
 
+~TODO
+Something about choosing variants/parameters dynamically.
+~
+
 In this paper, we propose a methodology and tool for enforcing statistical quality properties.
 We identify a class of application properties that, rather than constraining the behavior on any individual execution, describe statistical criteria over the aggregate behavior across many executions.
 Statistical quality properties can include many different aspects of program behavior; we discuss case studies involving performance, parallelism, approximation, and learning accuracy.
@@ -28,6 +32,17 @@ The goal is to use distribution testing to draw conclusions about aggregate prog
 &sysname; consists of two phases:
 an off-line testing phase that measures execution quality for a set of possible input distributions;
 and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
+
+We examine statistical quality properties through four case studies from four different domains:
+
+* Hash functions...
+* Parallel similarity search...
+* Approximate image filtering...
+* Accuracy of machine learning models...
+
+In each case, the application's statistical quality property cannot be enforced using a traditional, deterministic correctness tool.
+We show that &syname; can enforce the property by making dynamic decisions based on changing inputs.
+In each case, the &sysname;-augmented version of the program outperforms the best non-adaptive configuration by...
 
 # Related Work
 
