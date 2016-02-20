@@ -1,5 +1,5 @@
 TARGET := dtest
-# DEPS := $(TARGET).bib
+DEPS := $(TARGET).bib
 
 HTML_DIR := html
 PDF_DIR := pdf

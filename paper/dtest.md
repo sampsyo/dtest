@@ -1,10 +1,12 @@
+bib: dtest
+
 # Introduction
 
 intro: statistical quality properties are useful and we want to test them
 
 # Related Work
 
-- auto-tuning (PetaBricks) and run-time algorithm selection (Nitro)
+- auto-tuning (PetaBricks [@petabricks]) and run-time algorithm selection (Nitro)
 - input distributions matter
 - distribution testing
 
@@ -54,3 +56,5 @@ implementation / usability / programmability case study
 dtest-ified systems outperform the best single configuration
 
 # Conclusion
+
+[BIB]
