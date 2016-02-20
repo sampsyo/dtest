@@ -20,7 +20,7 @@ introduce the application; the quality metric; the distribution test (from the p
 
 ## Performance: Hash Functions
 
-## Parallelism: Vector Distance
+## Parallelism: Similarity Search
 
 load balancing binary vector distance comparison (parallelism)
 
