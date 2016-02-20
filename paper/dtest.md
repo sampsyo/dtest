@@ -1,6 +1,21 @@
 bib: dtest
+title: Enforcing Statistical Quality Properties
+sysname: `dtest`
+
+[TITLE]
 
 # Introduction
+
+Tools for program correctness typically...
+
+In this paper, we propose a methodology and tool for enforcing *statistical* quality properties...
+We identify application properties that, rather than constraining the behavior on any individual execution, apply to the *aggregate* behavior across many executions...
+Statistical quality properties can include many different aspects of program behavior; we discuss case studies involving performance, parallelism, approximation, and learning accuracy.
+
+Our approach is to take advantage of a body of theoretical work on *distribution testing* [TK].
+Distribution tests use a small number of samples to make a statistical guarantee about the overall distribution of a data set.
+
+We describe &sysname;, a tool that tests and enforces statistical quality properties.
 
 intro: statistical quality properties are useful and we want to test them
 
