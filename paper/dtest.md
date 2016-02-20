@@ -1,0 +1,19 @@
+- intro: statistical quality properties are useful and we want to test them
+- related work
+    - auto-tuning (PetaBricks) and run-time algorithm selection (Nitro)
+    - input distributions matter
+    - distribution testing
+- system overview
+- distribution tests
+- applications / case studies: introduce the application; the quality metric; the distribution test (from the previous section) that we will use
+    - hashing (performance)
+    - load balancing binary vector distance comparison (parallelism)
+    - image filter (approximation)
+    - learning (accuracy)
+- implementation / usability / programmability case study
+    - how the user applies the system to their application
+    - how the tool works at run time
+        - what it looks like (a) when it succeeds, and (b) when it fails
+    - why the property you want is actually enforced
+- results
+    - dtest-ified systems outperform the best single configuration
