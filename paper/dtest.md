@@ -1,5 +1,5 @@
 bib: dtest
-title: Dynamically Enforcing Statistical Quality Properties
+title: Dynamically Enforcing Statistical Quality Properties in Input-Sensitive Programs
 sysname: `dtest`
 
 [TITLE]
