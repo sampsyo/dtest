@@ -6,18 +6,28 @@ sysname: `dtest`
 
 # Introduction
 
-Tools for program correctness typically...
+Most tools for program correctness enforce properties that must hold on every program execution.
+For example, a unit test might check that a sort algorithm produces correctly sorted output;
+a run-time assertion could check that a file handle is open before writing to it;
+or a performance evaluation could check that a task always completes in less than a second.
 
-In this paper, we propose a methodology and tool for enforcing *statistical* quality properties...
-We identify application properties that, rather than constraining the behavior on any individual execution, apply to the *aggregate* behavior across many executions...
+Increasingly, however, applications have quality properties that are not as easy to quantify deterministically.
+For example, consider an application that uses machine learning to classify images.
+Intuitively, the system designer wants the algorithm to produce correct classifications, but it is impossible to require that it be correct *every time*.
+Instead, quality for this application is an aggregate, statistical property: the application succeeds if it classifies images *with high probability* in aggregate over many images.
+
+In this paper, we propose a methodology and tool for enforcing statistical quality properties.
+We identify a class of application properties that, rather than constraining the behavior on any individual execution, describe statistical criteria over the aggregate behavior across many executions.
 Statistical quality properties can include many different aspects of program behavior; we discuss case studies involving performance, parallelism, approximation, and learning accuracy.
 
 Our approach is to take advantage of a body of theoretical work on *distribution testing* [TK].
 Distribution tests use a small number of samples to make a statistical guarantee about the overall distribution of a data set.
 
 We describe &sysname;, a tool that tests and enforces statistical quality properties.
-
-intro: statistical quality properties are useful and we want to test them
+The goal is to use distribution testing to draw conclusions about aggregate program behavior using only a few input examples.
+&sysname; consists of two phases:
+an off-line testing phase that measures execution quality for a set of possible input distributions;
+and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
 
 # Related Work
 
