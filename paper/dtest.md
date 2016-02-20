@@ -29,6 +29,7 @@ introduce the application; the quality metric; the distribution test (from the p
 ## Performance: Hash Functions
 
 - Main related work: Seven-dimensional hash comparison, where one dimension is distribution.  They look at ``Dense'' = $\{1,2,..,n\}$, and ``Sparse'' = random 64-bit ints, and ``Grid'' = eight ints, each in $\{0,1,2,..,14\}$.
+[@hashcompare]
 
 - Goal: reproduce one of their results. 
 
