@@ -17,7 +17,11 @@ Intuitively, the system designer wants the algorithm to produce correct classifi
 Instead, quality for this application is an aggregate, statistical property: the application succeeds if it classifies images *with high probability* in aggregate over many images.
 
 ~TODO
-Something about choosing variants/parameters dynamically.
+Introduce the three factors of applications we care about:
+
+- Quality property. You want to enforce something that is a probabilistic statement over many executions of the program. Not a *correctness property*, which must be true on *every* execution.
+- Quality depends on the input distribution.
+- There's some parameter or choice that you want to make based on the input distribution to meet the quality property.
 ~
 
 In this paper, we propose a methodology and tool for enforcing statistical quality properties.
@@ -68,12 +72,12 @@ introduce the application; the quality metric; the distribution test (from the p
 
 ## Performance: Hash Functions
 
-- Main related work: Seven-dimensional hash comparison, where one dimension is distribution.  They look at ``Dense'' = $\{1,2,..,n\}$, and ``Sparse'' = random 64-bit ints, and ``Grid'' = eight ints, each in $\{0,1,2,..,14\}$.
+- Main related work: Seven-dimensional hash comparison, where one dimension is distribution.  They look at "Dense" = $\{1,2,..,n\}$, and "Sparse" = random 64-bit ints, and "Grid" = eight ints, each in $\{0,1,2,..,14\}$.
 [@hashcompare]
 
 - Goal: reproduce one of their results.
 
-- They claim one result about Mult-Shift being more ``stable'' than Murmur as you change the input distribution (bottom of page 103).
+- They claim one result about Mult-Shift being more "stable" than Murmur as you change the input distribution (bottom of page 103).
 
 - Ideal outcome:
 
@@ -83,7 +87,7 @@ introduce the application; the quality metric; the distribution test (from the p
 
 - Filter-then-verify pipelines seem amenable to dtesting, since we can test the filtering capabilities, and then the verification time/quality is proportional to the filtering successfulness.
 
-- In the all-pairs Hamming similarity join problem space, many papers have used filtering techniques that have performance directly scaling with the data distribution ``randomness''.
+- In the all-pairs Hamming similarity join problem space, many papers have used filtering techniques that have performance directly scaling with the data distribution "randomness".
 
 - For example, if you do filtering based on chunks of the input bits,
 then if the vectors are random looking in the chunk, it will filter well,
