@@ -10,6 +10,12 @@ intro: statistical quality properties are useful and we want to test them
 
 # System Overview
 
+~ Figure { #fig-overview; caption: "Overview of the dtest system." }
+![overview][]
+~
+
+[overview]: fig/overview.pdf { width: 3in; }
+
 system overview
 
 # Distribution Tests
