@@ -71,10 +71,11 @@ introduce the application; the quality metric; the distribution test (from the p
 - Main related work: Seven-dimensional hash comparison, where one dimension is distribution.  They look at ``Dense'' = $\{1,2,..,n\}$, and ``Sparse'' = random 64-bit ints, and ``Grid'' = eight ints, each in $\{0,1,2,..,14\}$.
 [@hashcompare]
 
-- Goal: reproduce one of their results. 
+- Goal: reproduce one of their results.
 
 - They claim one result about Mult-Shift being more ``stable'' than Murmur as you change the input distribution (bottom of page 103).
 
+- Ideal outcome:
 
 ## Parallelism: Similarity Search
 
@@ -84,9 +85,11 @@ introduce the application; the quality metric; the distribution test (from the p
 
 - In the all-pairs Hamming similarity join problem space, many papers have used filtering techniques that have performance directly scaling with the data distribution ``randomness''.
 
-- For example, if you do filtering based on chunks of the input bits, 
-then if the vectors are random looking in the chunk, it will filter well, 
+- For example, if you do filtering based on chunks of the input bits,
+then if the vectors are random looking in the chunk, it will filter well,
 but if the chunks are highly modal (only a few values in that chunk) then it will not filter very much at all.
+
+- Ideal outcome:
 
 ## Approximation: Image Filters
 
@@ -102,6 +105,8 @@ but if the chunks are highly modal (only a few values in that chunk) then it wil
 
 - I am imagining an algorithm that takes a long time to train, and has basically the same predictive power, unless the training data change significantly.  And if the data change, then retraining will be necessary, although expensive.
 
+- Ideal outcome:
+
 # Experience
 
 ## Implementation
@@ -113,10 +118,43 @@ implementation / usability / programmability case study
     - what it looks like (a) when it succeeds, and (b) when it fails
 - why the property you want is actually enforced
 
+- Ideal outcome:
+
 # Results
 
-dtest-ified systems outperform the best single configuration
+- System-centric outcome
+    - Example of using the system, end-to-end, sucessfully, in one of the application domains
+    - Explanation about why our workflow eliminates unnecessary configuration time
+    - Interpretation of the statistical guarantees, as specified to this domain
+    - We trump the auto-tuning feature based approach because...
+    - Some timing and stats for the pre-processing / run time / post-processing executions 
 
+- Ideal application-centric outcomes:
+    - Punchline: dtest-ified systems outperform the best single configuration
+    - Similarity Search:
+        - Input Distributions: Random, Clustered, Grid
+        - Possible Algorithms: Chunk splitting, Random filter/hash, LSH, ...
+        - Possible Schemes: parallelization ideas ...
+        - System: Pick the algorithm+parallelization depending on the input distribution
+        - Outcome: We have overall less communication and faster computation than a single config
+    - Hashing:
+        - Input Distributions: Random, Small Range, Grid, PiecewiseConstant
+        - Possible Algorithms: List of 23+ Hash functions
+        - Possible Schemes: See 7D Hash paper (linear, quadractic, robin hood, cuckoo)
+        - System: Pick the algorithm+structure depending on the input distribution
+        - Outcome: We have overall less collisions/time than a single config
+    - Image Filter:
+        - Input Distributions: Faces, Landscapes, Crowds, Animals, Scientific Pics, Drawings
+        - Possible Algorithms:
+        - Possible Schemes:
+        - System: Pick the algorithm+structure depending on the input distribution
+        - Outcome:
+    - Accuracy Application:
+        - Input Distributions:
+        - Possible Algorithms:
+        - Possible Schemes:
+        - System: Pick the algorithm+structure depending on the input distribution
+        - Outcome:
 # Conclusion
 
 [BIB]
