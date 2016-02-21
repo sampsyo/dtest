@@ -526,7 +526,7 @@ bool collide(hash_func_t *hf, uint64_t key1, uint64_t key2) {
 #define FOR_ALL_HASHES(MACRO) \
 
 unsigned int our_hash(uint64_t key) {
-    return (17841441073284374527UL * key + 15880194219300036605UL) >> 56;
+    return (17841441073284374527UL * key + 15880194219300036605UL) >> (64 - LOG_BUCKETS);
 }
 
 unsigned int HashMultAddShift(const char *key, size_t len) {
