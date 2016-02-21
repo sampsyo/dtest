@@ -28,7 +28,7 @@ unsigned int _rotr(unsigned int value, int shift) {
 
 // A hash function with multiplier 702100903 (new)
 UINT HashMultShift(const CHAR *key, SIZE_T len) {
-    return (702100903 * (*((uint64_t *)key))) >> (len - 8);
+    return (12079159381049432063UL * (*((uint64_t *)key))) >> 56;
 }
 
 // Bernstein's hash
@@ -525,10 +525,10 @@ bool collide(hash_func_t *hf, uint64_t key1, uint64_t key2) {
 #define FOR_ALL_HASHES(MACRO) \
 
 unsigned int our_hash(uint64_t key) {
-    return 734507 * key + 58578;
+    return (17841441073284374527UL * key + 15880194219300036605UL) >> 56;
 }
 
-unsigned int our_hash_func(const char *key, size_t len) {
+unsigned int HashMultAddShift(const char *key, size_t len) {
     return our_hash(*((uint64_t *)key));
 }
 
@@ -591,7 +591,7 @@ int main(int argc, const char **argv) {
         hf = HashMultShift;
         break;
     case 17:
-        hf = our_hash_func;
+        hf = HashMultAddShift;
         break;
     default:
         printf("unrecognized index!\n");
@@ -615,6 +615,7 @@ int main(int argc, const char **argv) {
         }
 
         bucket_counts[bucket_for(hf,key1)]++;
+        // printf("%u\n", bucket_for(hf, key1));
         ++count;
     }
 

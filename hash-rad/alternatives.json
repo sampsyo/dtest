@@ -4,7 +4,15 @@
         "args": [10]
     },
     {
-        "name": "ourhash",
+        "name": "HashMultShift",
         "args": [16]
+    },
+    {
+        "name": "HashMultAddShift",
+        "args": [17]
+    },
+    {
+        "name": "HashKernighanRitchie",
+        "args": [2]
     }
 ]
