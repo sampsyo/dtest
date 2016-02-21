@@ -1,0 +1,14 @@
+[
+    {
+        "name": "dense",
+        "kind": "uniform",
+        "min": 0,
+        "max": 4096
+    },
+    {
+        "name": "sparse",
+        "kind": "uniform",
+        "min": 0,
+        "max": 18446744073709551615
+    }
+]

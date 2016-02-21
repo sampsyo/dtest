@@ -1,0 +1,10 @@
+[
+    {
+        "name": "HashMurmur2",
+        "args": [10]
+    },
+    {
+        "name": "ourhash",
+        "args": [16]
+    }
+]
