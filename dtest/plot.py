@@ -22,14 +22,15 @@ def draw(quality, out_fn):
         bar.yMaxes = []
         bar.label = hashname
         bar.color = COLORS[j]
+        bar.errorBarColor = "black"
         bars.append(bar)
 
     labels = []
     for i, (dist, data) in enumerate(sorted(quality.items())):
         for j, (hashname, (min, mid, max)) in enumerate(sorted(data.items())):
-            # bars[j].yMins.append(min)
+            bars[j].yMins.append(min)
             bars[j].yValues.append(mid)
-            # bars[j].yMaxes.append(max)
+            bars[j].yMaxes.append(max)
         labels.append(dist)
 
     clusteredBars = boomslang.ClusteredBars()
@@ -38,7 +39,7 @@ def draw(quality, out_fn):
 
     clusteredBars.xTickLabels = labels
     clusteredBars.spacing = 0.5
-    # clusteredBars.drawErrorBars('y')
+    clusteredBars.drawErrorBars('y')
 
     plot = boomslang.Plot()
     plot.hasLegend()
