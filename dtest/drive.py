@@ -37,7 +37,7 @@ def counts_to_scores(results):
         for func, collisions in res.items():
             min, max = clopper_pearson(collisions, NTESTS)
             mid = collisions / NTESTS
-            dist_out[func] = min * BUCKETS, mid, max * BUCKETS
+            dist_out[func] = min, mid, max
     return out
 
 
