@@ -64,7 +64,11 @@
         "args": [15]
     },
     {
-        "name": "ourhash",
+        "name": "HashMultShift",
         "args": [16]
+    },
+    {
+        "name": "ourhash",
+        "args": [17]
     }
 ]

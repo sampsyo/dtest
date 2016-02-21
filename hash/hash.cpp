@@ -26,6 +26,11 @@ unsigned int _rotr(unsigned int value, int shift) {
     return (value >> shift) | (value << (32 - shift));
 }
 
+// A hash function with multiplier 702100903 (new)
+UINT HashMultShift(const CHAR *key, SIZE_T len) {
+    return (702100903 * (*((uint64_t *)key))) >> (len - 8);
+}
+
 // Bernstein's hash
 UINT HashBernstein(const CHAR *key, SIZE_T len) {
     UINT hash = 5381;
@@ -527,7 +532,6 @@ unsigned int our_hash_func(const char *key, size_t len) {
     return our_hash(*((uint64_t *)key));
 }
 
-
 int main(int argc, const char **argv) {
     const char *hf_index_str = argv[1];
     const char *data_filename = argv[2];
@@ -584,6 +588,9 @@ int main(int argc, const char **argv) {
         hf = HashLookup3;
         break;
     case 16:
+        hf = HashMultShift;
+        break;
+    case 17:
         hf = our_hash_func;
         break;
     default:
