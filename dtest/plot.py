@@ -2,7 +2,9 @@ import boomslang
 import json
 
 
-COLORS = ["red", "green", "blue", "orange"]
+COLORS = ["red", "green", "blue", "orange", "purple", "pink", "brown", "gray",
+          "white", "cyan", "yellow", "magenta", "#cccccc", "#707070",
+          "#303030", "#123456", "#228b22", "#deadbe"]
 
 
 def plot(quality_fn, out_fn):
@@ -42,7 +44,8 @@ def draw(quality, out_fn):
     clusteredBars.drawErrorBars('y')
 
     plot = boomslang.Plot()
-    plot.hasLegend()
+    # plot.hasLegend(location='center left', bbox_to_anchor=(1.0, 0.5))
+    plot.hasLegend(location='center right')
     plot.add(clusteredBars)
     plot.save(out_fn)
 

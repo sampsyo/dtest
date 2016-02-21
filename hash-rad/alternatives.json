@@ -1,7 +1,67 @@
 [
     {
+        "name": "HashBernstein",
+        "args": [0]
+    },
+    {
+        "name": "HashLarson",
+        "args": [1]
+    },
+    {
+        "name": "HashKernighanRitchie",
+        "args": [2]
+    },
+    {
+        "name": "Hash17_unrolled",
+        "args": [3]
+    },
+    {
+        "name": "Hash17",
+        "args": [4]
+    },
+    {
+        "name": "Hash65599",
+        "args": [5]
+    },
+    {
+        "name": "HashFNV1a",
+        "args": [6]
+    },
+    {
+        "name": "HashWeinberger",
+        "args": [7]
+    },
+    {
+        "name": "HashRamakrishna",
+        "args": [8]
+    },
+    {
+        "name": "HashFletcher",
+        "args": [9]
+    },
+    {
         "name": "HashMurmur2",
         "args": [10]
+    },
+    {
+        "name": "HashPaulHsieh",
+        "args": [11]
+    },
+    {
+        "name": "HashOneAtTime",
+        "args": [12]
+    },
+    {
+        "name": "HashArashPartow",
+        "args": [13]
+    },
+    {
+        "name": "HashUniversal",
+        "args": [14]
+    },
+    {
+        "name": "HashLookup3",
+        "args": [15]
     },
     {
         "name": "HashMultShift",
@@ -10,9 +70,5 @@
     {
         "name": "HashMultAddShift",
         "args": [17]
-    },
-    {
-        "name": "HashKernighanRitchie",
-        "args": [2]
     }
 ]
