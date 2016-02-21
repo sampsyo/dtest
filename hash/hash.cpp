@@ -14,6 +14,9 @@
 #define UINT8 uint8_t
 #define INT int
 
+const size_t LOG_BUCKETS = 10;
+const size_t BUCKETS = 1L << LOG_BUCKETS;
+
 unsigned int _rotl(unsigned int value, int shift) {
     if ((shift &= 31) == 0)
       return value;
@@ -28,7 +31,7 @@ unsigned int _rotr(unsigned int value, int shift) {
 
 // A hash function with multiplier 702100903 (new)
 UINT HashMultShift(const CHAR *key, SIZE_T len) {
-    return (12079159381049432063UL * (*((uint64_t *)key))) >> 56;
+    return (12079159381049432063UL * (*((uint64_t *)key))) >> (64 - LOG_BUCKETS);
 }
 
 // Bernstein's hash
@@ -504,8 +507,6 @@ UINT HashLookup3( const CHAR* key, SIZE_T length) {
   return c;
 }
 
-const size_t BUCKETS = 256;
-const size_t NTESTS = 1L << 20;
 const size_t NFUNCTIONS = 18;
 
 typedef unsigned int hash_func_t(const char *key, size_t len);

@@ -6,8 +6,8 @@ import scipy.stats
 import math
 from . import distributions
 
-BUCKETS = 256
-NTESTS = 1 << 10
+BUCKETS = 1 << 10
+NTESTS = 1 << 20
 
 
 def get_result(args, exe='hash', infile='temp.txt'):
