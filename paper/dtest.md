@@ -37,12 +37,15 @@ The goal is to use distribution testing to draw conclusions about aggregate prog
 an off-line testing phase that measures execution quality for a set of possible input distributions;
 and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
 
-We examine statistical quality properties through four case studies from four different domains:
+&sysname; can enforce statistical quality properties that describe any kind of program behavior.
+We develop a series of case studies where the properties encompass performance, parallelism, accuracy, and classification precision.
+accuracy, reliability, performance, and parallelism.
+The applications domains are:
 
-* Hash functions...
-* Parallel similarity search...
-* Approximate image filtering...
-* Accuracy of machine learning models...
+* Hash functions, where the distribution of input keys affects *performance* via the balance among hash-table buckets.
+* Similarity search, where the distribution of vectors dictates the *parallelism* in the algorithm.
+* Image filtering, where approximation strategies offer varying *accuracy* depending on the distribution of input pixels.
+* Machine-learning models, where training hyperparameters control the *precision* and *recall* of the learned model for any given input distribution.
 
 In each case, the application's statistical quality property cannot be enforced using a traditional, deterministic correctness tool.
 We show that &syname; can enforce the property by making dynamic decisions based on changing inputs.
