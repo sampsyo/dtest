@@ -16,7 +16,7 @@ def get_result(args, exe='hash', infile='temp.txt'):
     cmd = [os.path.abspath(exe)] + list(map(str, args)) + [infile]
 
     print('executing', cmd)
-    output = subprocess.check_output(cmd)
+    output = subprocess.check_output(cmd).decode('utf8')
 
     # Explicitly marked output.
     match = re.search(OUTPUT_RE, output)
