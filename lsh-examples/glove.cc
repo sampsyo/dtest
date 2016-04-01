@@ -226,7 +226,7 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
   }
 
   int r = num_probes;
-  int l = r / 2;
+  int l =  (r/2 >= start_num_probes) ? r/2 : start_num_probes;
 
   while (r - l > 1) {
     int num_probes = (l + r) / 2;
@@ -241,7 +241,6 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
     }
   }
 
-  //return r >= NUM_HASH_TABLES ? r : NUM_HASH_TABLES;
   return r;
 }
 
@@ -346,7 +345,7 @@ int main(int argc, char** argv) {
     cout << "average number of unique candidates: "
 	 << statistics.average_num_unique_candidates << endl;
     cout << "score: " << score << endl;
-  }   
+  }
   catch (runtime_error &e) {
     cerr << "Runtime error: " << e.what() << endl;
     return 1;
