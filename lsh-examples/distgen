@@ -1,2 +1,15 @@
-#!/bin/sh
-echo "hi"
+#!/usr/bin/env python
+
+import sys
+import struct
+
+
+def distgen(count, dimension, outf=sys.stdout):
+    for i in range(count):
+        row = [10] * dimension
+        outf.write(struct.pack('i', len(row)))
+        outf.write(struct.pack('%sf' % len(row), *row))
+
+
+if __name__ == "__main__":
+    distgen(100, int(sys.argv[1]))
