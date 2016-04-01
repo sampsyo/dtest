@@ -1,0 +1,7 @@
+[
+    {
+        "name": "norm01",
+        "program": ["./distgen"],
+        "args": [0.0, 1.0]
+    }
+]

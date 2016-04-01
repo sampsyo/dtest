@@ -49,11 +49,34 @@ def counts_to_scores(results):
     return out
 
 
-def generate_sample(dist, count):
-    func = distributions.GEN_FUNCTIONS[dist['kind']]
-    args = {k: v for k, v in dist.items() if k not in ('name', 'kind')}
-    args['count'] = count
-    return func(**args)
+def generate_sample(dist, count, outfile='temp.txt'):
+    if 'kind' in dist:
+        # Use a built-in distribution generator. We look up the function
+        # in the `distributions` module.
+        func = distributions.GEN_FUNCTIONS[dist['kind']]
+        args = {k: v for k, v in dist.items() if k not in ('name', 'kind')}
+        args['count'] = count
+        data = func(**args)
+        with open(outfile, 'w') as f:
+            for sample in data:
+                if isinstance(sample, list):
+                    # For bit vectors.
+                    f.write(' '.join(str(i).zfill(5) for i in sample)
+                            + ' ')
+                else:
+                    # FIXME integers!
+                    f.write('{}\n'.format(int(sample)))
+
+    else:
+        # An extensible, external distribution generator. This works by
+        # invoking a program with the specified arguments to generate a
+        # sample. The distribution dictionary contains `program`, which
+        # is an executable name and any initial arguments, and `args`.
+        # We'll invoke the program with the number of samples followed
+        # by the specified args.
+        args = dist['program'] + [count] + dist['args']
+        with open(outfile, 'w') as f:
+            subprocess.Popen(args, stdout=f)
 
 
 def main(distributions_json, alternatives_json, outfile, command):
@@ -73,16 +96,7 @@ def main(distributions_json, alternatives_json, outfile, command):
 
         for config in configs:
             # Write the data file.
-            data = generate_sample(dist, NTESTS)
-            with open('temp.txt', 'w') as f:
-                for sample in data:
-                    if isinstance(sample, list):
-                        # For bit vectors.
-                        f.write(' '.join(str(i).zfill(5) for i in sample)
-                                + ' ')
-                    else:
-                        # FIXME integers!
-                        f.write('{}\n'.format(int(sample)))
+            generate_sample(dist, NTESTS)
 
             # Invoke the executable.
             results[dist['name']][config['name']] = \
