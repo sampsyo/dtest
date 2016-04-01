@@ -1,5 +1,5 @@
 bib: dtest
-title: Dynamically Enforcing Statistical Quality Properties in Input-Sensitive Programs
+title: Dynamically Enforcing Statistical Quality Properties with Distribution Testing
 sysname: `dtest`
 
 [TITLE]
@@ -14,17 +14,17 @@ or a performance evaluation could check that a task always completes in less tha
 Increasingly, however, applications have quality properties that are not as easy to quantify deterministically.
 For example, consider an application that uses machine learning to classify images.
 Intuitively, the system designer wants the algorithm to produce correct classifications, but it is impossible to require that it be correct *every time*.
-Instead, quality for this application is an aggregate, statistical property: the application succeeds if it classifies images *with high probability* in aggregate over many images.
+Instead, quality for this application is an aggregate, statistical property: the application succeeds if it classifies images correctly with high probability in aggregate over many images.
+This kind of property applies to the distribution of behaviors that the program exhibits over time rather to any individual execution.
+We call this category of correctness property a *statistical quality property*.
 
-~TODO
-Introduce the three factors of applications we care about:
+Statistical quality properties are more difficult to enforce at run time than traditional, deterministic correctness properties.
+A program can check a function's precondition, for example, before executing the function and raise an exception if it does not hold.
+But when correctness depends on the distribution of many inputs, the right dynamic check is less obvious.
+If the program's developer has tested it while assuming a certain distribution of inputs, how can they check whether the inputs it sees in deployment are similarly distributed?
 
-- Quality property. You want to enforce something that is a probabilistic statement over many executions of the program. Not a *correctness property*, which must be true on *every* execution.
-- Quality depends on the input distribution.
-- There's some parameter or choice that you want to make based on the input distribution to meet the quality property.
-~
-
-In this paper, we propose a methodology and tool for enforcing statistical quality properties.
+Programmers need tools that can ensure that *in vivo* behavior matches *in vitro* measurement.
+We propose a methodology and tool for enforcing statistical quality properties.
 We identify a class of application properties that, rather than constraining the behavior on any individual execution, describe statistical criteria over the aggregate behavior across many executions.
 Statistical quality properties can include many different aspects of program behavior; we discuss case studies involving performance, parallelism, approximation, and learning accuracy.
 
@@ -37,12 +37,15 @@ The goal is to use distribution testing to draw conclusions about aggregate prog
 an off-line testing phase that measures execution quality for a set of possible input distributions;
 and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
 
-We examine statistical quality properties through four case studies from four different domains:
+&sysname; can enforce statistical quality properties that describe any kind of program behavior.
+We develop a series of case studies where the properties encompass performance, parallelism, accuracy, and classification precision.
+accuracy, reliability, performance, and parallelism.
+The applications domains are:
 
-* Hash functions...
-* Parallel similarity search...
-* Approximate image filtering...
-* Accuracy of machine learning models...
+* Hash functions, where the distribution of input keys affects *performance* via the balance among hash-table buckets.
+* Similarity search, where the distribution of vectors dictates the *parallelism* in the algorithm.
+* Image filtering, where approximation strategies offer varying *accuracy* depending on the distribution of input pixels.
+* Machine-learning models, where training hyperparameters control the *precision* and *recall* of the learned model for any given input distribution.
 
 In each case, the application's statistical quality property cannot be enforced using a traditional, deterministic correctness tool.
 We show that &syname; can enforce the property by making dynamic decisions based on changing inputs.

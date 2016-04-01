@@ -1,0 +1,4 @@
+{
+    "input": "../data/zipcodes.txt",
+    "command": "../hash/hash"
+}

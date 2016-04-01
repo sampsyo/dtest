@@ -6,8 +6,8 @@ import scipy.stats
 import math
 from . import distributions
 
-BUCKETS = 256
-NTESTS = 1 << 10
+BUCKETS = 1 << 10
+NTESTS = 1 << 20
 
 
 def get_result(args, exe='hash', infile='temp.txt'):
@@ -37,7 +37,7 @@ def counts_to_scores(results):
         for func, collisions in res.items():
             min, max = clopper_pearson(collisions, NTESTS)
             mid = collisions / NTESTS
-            dist_out[func] = min * BUCKETS, mid, max * BUCKETS
+            dist_out[func] = min, mid, max
     return out
 
 
