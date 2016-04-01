@@ -75,8 +75,10 @@ def generate_sample(dist, count, outfile='temp.txt'):
         # We'll invoke the program with the number of samples followed
         # by the specified args.
         args = dist['program'] + [count] + dist['args']
+        args = [str(a) for a in args]
         with open(outfile, 'w') as f:
-            subprocess.Popen(args, stdout=f)
+            proc = subprocess.Popen(args, stdout=f)
+            proc.wait()
 
 
 def main(distributions_json, alternatives_json, outfile, command):

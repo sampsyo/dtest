@@ -1,7 +1,7 @@
 [
     {
         "name": "norm01",
-        "program": ["./distgen"],
+        "program": ["./lsh-examples/distgen"],
         "args": [0.0, 1.0]
     }
 ]
