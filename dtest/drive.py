@@ -4,10 +4,12 @@ import subprocess
 import os
 import scipy.stats
 import math
+import re
 from . import distributions
 
 BUCKETS = 1 << 10
 NTESTS = 1 << 20
+OUTPUT_RE = r'dtest score:\s*(\S+)'
 
 
 def get_result(args, exe='hash', infile='temp.txt'):
@@ -16,6 +18,12 @@ def get_result(args, exe='hash', infile='temp.txt'):
     print('executing', cmd)
     output = subprocess.check_output(cmd)
 
+    # Explicitly marked output.
+    match = re.search(OUTPUT_RE, output)
+    if match:
+        return match.group(1)
+
+    # If it's not explicitly marked, use the first token in the output.
     parts = output.split()
     return int(parts[0])
 
