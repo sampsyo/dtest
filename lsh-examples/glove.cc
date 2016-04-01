@@ -65,12 +65,12 @@ using falconn::get_default_parameters;
 
 typedef DenseVector<float> Point;
 
-const string FILE_NAME = "dataset/glove.6B.100d.dat";
-const int NUM_QUERIES = 100;
-const int SEED = 4057218;
-const int NUM_HASH_TABLES = 50;
-const int NUM_HASH_BITS = 18;
-const int NUM_ROTATIONS = 1;
+string FILE_NAME = "dataset/glove.6B.100d.dat";
+int NUM_QUERIES = 100;
+int SEED = 4057218;
+int NUM_HASH_TABLES = 50;
+int NUM_HASH_BITS = 18;
+int NUM_ROTATIONS = 1;
 
 /*
  * An auxiliary function that reads a point from a binary file that is produced
@@ -244,7 +244,10 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
   return r;
 }
 
-int main() {
+int main(int argc, char** argv) {
+    FILE_NAME = argv[1]; 
+    NUM_HASH_BITS = atoi(argv[2]);
+    NUM_ROTATIONS = atoi(argv[3]);
   try {
     vector<Point> dataset, queries;
     vector<int> answers;
