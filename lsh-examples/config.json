@@ -1,0 +1,4 @@
+{
+    "input": "dataset/glove.6B.100d.dat",
+    "command": "glove"
+}
