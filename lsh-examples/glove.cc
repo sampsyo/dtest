@@ -241,13 +241,14 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
     }
   }
 
+  //return r >= NUM_HASH_TABLES ? r : NUM_HASH_TABLES;
   return r;
 }
 
 int main(int argc, char** argv) {
-    FILE_NAME = argv[1]; 
-    NUM_HASH_BITS = atoi(argv[2]);
-    NUM_ROTATIONS = atoi(argv[3]);
+    FILE_NAME = argv[1];
+    NUM_HASH_TABLES = atoi(argv[2]);
+    NUM_HASH_BITS = atoi(argv[3]);
   try {
     vector<Point> dataset, queries;
     vector<int> answers;
@@ -259,7 +260,7 @@ int main(int argc, char** argv) {
 
     // normalize the data points
     cout << "normalizing points" << endl;
-    normalize(&dataset); 
+    normalize(&dataset);
     cout << "done" << endl;
 
     // find the center of mass
