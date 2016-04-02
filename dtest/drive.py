@@ -78,7 +78,8 @@ def generate_sample(dist, count, outfile='temp.txt'):
         args = [str(a) for a in args]
         with open(outfile, 'w') as f:
             proc = subprocess.Popen(args, stdout=f)
-            proc.wait()
+            retcode = proc.wait()
+            assert retcode == 0
 
 
 def main(distributions_json, alternatives_json, outfile, command):
