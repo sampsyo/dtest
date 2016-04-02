@@ -21,7 +21,7 @@ def get_result(args, exe='hash', infile='temp.txt'):
     # Explicitly marked output.
     match = re.search(OUTPUT_RE, output)
     if match:
-        return match.group(1)
+        return float(match.group(1))
 
     # If it's not explicitly marked, use the first token in the output.
     parts = output.split()
