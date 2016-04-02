@@ -246,13 +246,13 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
 
 int main(int argc, char** argv) {
     if ( argc != 4 ){
-        cout << "usage:   ./glove filename num_hash_tables num_hash_bits" << endl;
-        cout << "example: ./glove dataset/glove.6B.100d.dat 50 18" << endl;
+        cout << "usage:   ./glove num_hash_tables num_hash_bits filename" << endl;
+        cout << "example: ./glove 50 18 dataset/glove.6B.100d.dat" << endl;
         return 0;
     }
-    FILE_NAME = argv[1];
-    NUM_HASH_TABLES = atoi(argv[2]);
-    NUM_HASH_BITS = atoi(argv[3]);
+    NUM_HASH_TABLES = atoi(argv[1]);
+    NUM_HASH_BITS = atoi(argv[2]);
+    FILE_NAME = argv[3];
   try {
     vector<Point> dataset, queries;
     vector<int> answers;

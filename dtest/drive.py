@@ -8,7 +8,7 @@ import re
 from . import distributions
 
 BUCKETS = 1 << 10
-NTESTS = 1 << 20
+NTESTS = 1 << 10
 OUTPUT_RE = r'dtest score:\s*(\S+)'
 
 
