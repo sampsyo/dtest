@@ -245,6 +245,11 @@ int find_num_probes(LSHNearestNeighborTable<Point> *table,
 }
 
 int main(int argc, char** argv) {
+    if ( argc != 4 ){
+        cout << "usage:   ./glove filename num_hash_tables num_hash_bits" << endl;
+        cout << "example: ./glove dataset/glove.6B.100d.dat 50 18" << endl;
+        return 0;
+    }
     FILE_NAME = argv[1];
     NUM_HASH_TABLES = atoi(argv[2]);
     NUM_HASH_BITS = atoi(argv[3]);
@@ -345,6 +350,8 @@ int main(int argc, char** argv) {
     cout << "average number of unique candidates: "
 	 << statistics.average_num_unique_candidates << endl;
     cout << "score: " << score << endl;
+    cout << "dtest score: "
+     << num_probes + statistics.average_num_unique_candidates << endl;
   }
   catch (runtime_error &e) {
     cerr << "Runtime error: " << e.what() << endl;
