@@ -25,10 +25,19 @@ def parse_packed_floats(buffer):
     return rows
 
 
-def disttest(infile):
+def test_vectors(vecs, kind, dims, args):
+    if kind == 'uniform':
+        min, max = args
+        print(vecs, min, max)
+
+    else:
+        raise Exception('unknown distribution kind {}'.format(kind))
+
+
+def disttest(infile, args):
     rows = parse_packed_floats(infile.read())
-    print(rows)
+    test_vectors(rows, args[0], int(args[1]), map(float, args[2:]))
 
 
 if __name__ == '__main__':
-    disttest(sys.stdin)
+    disttest(sys.stdin, sys.argv[1:])
