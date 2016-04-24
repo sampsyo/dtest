@@ -31,6 +31,12 @@ def get_result(args, exe='hash', infile='temp.txt'):
 def clopper_pearson(x, n, alpha=0.05):
     """Estimate the confidence interval for a sampled Bernoulli random
     variable.
+
+    `x` is the number of successes and `n` is the number trials (x <=
+    n). `alpha` is the confidence level (i.e., the true probability is
+    inside the confidence interval with probability 1-alpha). The
+    function returns a `(low, high)` pair of numbers indicating the
+    interval on the probability.
     """
     b = scipy.stats.beta.ppf
     lo = b(alpha / 2, x, n - x + 1)
