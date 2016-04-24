@@ -2,6 +2,7 @@
     {
         "name": "uniform",
         "program": ["./lsh-examples/distgen"],
+        "test_program": ["./lsh-examples/disttest"],
         "args": ["uniform", 100, 0.0, 1.0]
     }
 ]

@@ -4,6 +4,7 @@ import numpy
 import json
 import collections
 import math
+import subprocess
 from . import distributions
 
 NUM_TESTS = 10
@@ -73,18 +74,49 @@ TEST_FUNCTIONS = {
 }
 
 
-def get_scores(data, dists):
+def get_scores(data_filename, dists):
+    """Get the similarity scores for the given data against the given
+    distribution specifications. Return a map from distribution names to
+    scores.
+    """
     scores = {}
 
     for dist in dists:
-        try:
-            func = TEST_FUNCTIONS[dist['kind']]
-        except KeyError:
-            print('no test found for', dist['kind'])
-            continue
+        if 'test_program' in dist:
+            # An extensible distribution that has a program that can compute
+            # scores.
 
-        args = {k: v for k, v in dist.items() if k not in ('kind', 'name')}
-        score = func(data, **args)
+            # Run the test program and direct it to read the data file.
+            command = dist['test_program'] + dist['args']
+            command = [str(a).encode('utf8') for a in command]
+            print('testing data file {} with command {}'.format(data_filename,
+                                                                command))
+            with open(data_filename) as f:
+                proc = subprocess.Popen(
+                    command,
+                    stdin=f,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                stdout, stderr = proc.communicate()
+                retcode = proc.wait()
+                assert retcode == 0
+
+            # The program's output should be the score.
+            score = float(stdout.strip())
+
+        else:
+            # A built-in distribution test. The data file must be formatted as
+            # a text file with a list of numbers.
+            try:
+                func = TEST_FUNCTIONS[dist['kind']]
+            except KeyError:
+                print('no test found for', dist['kind'])
+                continue
+
+            args = {k: v for k, v in dist.items() if k not in ('kind', 'name')}
+            data = numpy.loadtxt(data_filename)
+            score = func(data, **args)
 
         scores[dist['name']] = score
 
@@ -110,16 +142,16 @@ def dict_max(d):
 
 
 def model_score(data_filename, dists_filename, out_filename):
-    data = numpy.loadtxt(data_filename)
-
+    """Score some data against a set of possible distributions and write
+    the similarity scores.
+    """
     with open(dists_filename) as dists_file:
         dists = json.load(dists_file)
 
     scores_samples = []
     for _ in range(NUM_TESTS):
-        scores_samples.append(get_scores(data, dists))
+        scores_samples.append(get_scores(data_filename, dists))
 
     scores_avg = dict_average(scores_samples)
-#    print(dict_max(scores_avg))
     with open(out_filename, 'w') as f:
         json.dump(scores_avg, f)

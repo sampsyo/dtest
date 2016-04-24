@@ -28,7 +28,8 @@ def parse_packed_floats(buffer):
 def test_vectors(vecs, kind, dims, args):
     if kind == 'uniform':
         min, max = args
-        print(vecs, min, max)
+        return 1.0
+        # print(vecs, min, max)
 
     else:
         raise Exception('unknown distribution kind {}'.format(kind))
@@ -36,7 +37,8 @@ def test_vectors(vecs, kind, dims, args):
 
 def disttest(infile, args):
     rows = parse_packed_floats(infile.read())
-    test_vectors(rows, args[0], int(args[1]), map(float, args[2:]))
+    score = test_vectors(rows, args[0], int(args[1]), map(float, args[2:]))
+    print(score)
 
 
 if __name__ == '__main__':
