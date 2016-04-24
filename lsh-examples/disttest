@@ -2,6 +2,8 @@
 
 import sys
 import struct
+from scipy.stats import ks_2samp
+from distgen import rowgen
 
 
 def unpack_advance(fmt, buffer, offset):
@@ -26,13 +28,14 @@ def parse_packed_floats(buffer):
 
 
 def test_vectors(vecs, kind, dims, args):
-    if kind == 'uniform':
-        min, max = args
-        return 1.0
-        # print(vecs, min, max)
+    # Generate data from the appropriate distribution.
+    synthetic = []
+    for i in range(len(vecs)):
+        synthetic.append(rowgen(kind, dims, args))
 
-    else:
-        raise Exception('unknown distribution kind {}'.format(kind))
+    # Test for similarity.
+    _, p = ks_2samp(synthetic, vecs)
+    return p
 
 
 def disttest(infile, args):
