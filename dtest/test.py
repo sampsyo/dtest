@@ -99,6 +99,8 @@ def get_scores(data_filename, dists):
                     stderr=subprocess.PIPE,
                 )
                 stdout, stderr = proc.communicate()
+                if stderr:
+                    print(stderr.decode('utf8'))
                 retcode = proc.wait()
                 assert retcode == 0
 

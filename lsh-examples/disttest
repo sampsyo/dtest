@@ -3,7 +3,20 @@
 import sys
 import struct
 from scipy.stats import ks_2samp
-from distgen import rowgen
+import random
+
+
+# TODO: Undo copypasta.
+def rowgen(kind, dims, args):
+    if kind == 'uniform':
+        min, max = [float(a) for a in args]
+        out = []
+        for i in range(dims):
+            out.append(random.uniform(min, max))
+        return out
+
+    else:
+        raise Exception('unknown distribution kind {}'.format(kind))
 
 
 def unpack_advance(fmt, buffer, offset):
