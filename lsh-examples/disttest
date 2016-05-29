@@ -16,6 +16,13 @@ def rowgen(kind, dims, args):
             out.append(random.uniform(min, max))
         return out
 
+    elif kind == 'normal':
+        mean, variance = [float(a) for a in args]
+        out = []
+        for i in range(dims):
+            out.append(random.normalvariate(mean, variance))
+        return out
+
     else:
         raise Exception('unknown distribution kind {}'.format(kind))
 
