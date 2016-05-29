@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 import struct
 import random
 
 
-def distgen(count, kind, dimension, args, outf=sys.stdout):
+def distgen(count, kind, dimension, args, outf=sys.stdout.buffer):
     for i in range(count):
         row = rowgen(kind, dimension, args)
         outf.write(struct.pack('i', len(row)))

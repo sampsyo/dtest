@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import print_function
 
 import sys
@@ -75,9 +75,10 @@ def test_vectors(vecs, kind, dims, args):
 
 def disttest(infile, args):
     rows = parse_packed_floats(infile.read())
-    score = test_vectors(rows, args[0], int(args[1]), map(float, args[2:]))
+    score = test_vectors(rows, args[0], int(args[1]),
+                         list(map(float, args[2:])))
     print(score)
 
 
 if __name__ == '__main__':
-    disttest(sys.stdin, sys.argv[1:])
+    disttest(sys.stdin.buffer, sys.argv[1:])
