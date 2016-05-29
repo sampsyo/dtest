@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import sys
 import struct
@@ -40,15 +41,29 @@ def parse_packed_floats(buffer):
     return rows
 
 
+def project(vecs, index):
+    """Given a sequence of vectors, project one dimension into a
+    sequence of single values.
+    """
+    for vec in vecs:
+        yield vec[index]
+
+
 def test_vectors(vecs, kind, dims, args):
     # Generate data from the appropriate distribution.
     synthetic = []
     for i in range(len(vecs)):
         synthetic.append(rowgen(kind, dims, args))
 
-    # Test for similarity.
-    _, p = ks_2samp(synthetic, vecs)
-    return p
+    # Test for similarity in each dimension.
+    p_values = []
+    for index in range(dims):
+        synthetic_proj = list(project(synthetic, index))
+        vecs_proj = list(project(vecs, index))
+        _, p = ks_2samp(synthetic_proj, vecs_proj)
+        p_values.append(p)
+    # print(p_values, file=sys.stderr)
+    return sum(p_values)
 
 
 def disttest(infile, args):
