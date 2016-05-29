@@ -24,4 +24,4 @@ def txt2dat(txtpath):
 
 
 if __name__ == '__main__':
-    txt2dat('dataset/glove.6B.100d.txt')
+    txt2dat(sys.argv[1])
