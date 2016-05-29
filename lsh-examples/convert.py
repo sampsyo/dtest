@@ -15,7 +15,6 @@ def txt2dat(txtpath):
             counter = 0
             for line in inf:
                 row = [float(x) for x in line.split()[1:]]
-                assert len(row) == 100
                 ouf.write(struct.pack('i', len(row)))
                 ouf.write(struct.pack('%sf' % len(row), *row))
                 counter += 1
