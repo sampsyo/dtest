@@ -6,9 +6,15 @@
         "args": ["uniform", 100, -1.0, 1.0]
     },
     {
-        "name": "uniform",
+        "name": "normal",
         "program": ["./lsh-examples/distgen"],
         "test_program": ["./lsh-examples/disttest"],
         "args": ["normal", 100, 0.0, 1.0]
+    },
+    {
+        "name": "uniform+",
+        "program": ["./lsh-examples/distgen"],
+        "test_program": ["./lsh-examples/disttest"],
+        "args": ["uniform", 100, 0.0, 1.0]
     }
 ]
