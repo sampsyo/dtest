@@ -75,7 +75,8 @@ def test_vectors(vecs, kind, dims, args):
 
 def disttest(infile, args):
     rows = parse_packed_floats(infile.read())
-    score = test_vectors(rows, args[0], int(args[1]), map(float, args[2:]))
+    score = test_vectors(rows, args[0], int(args[1]),
+                         list(map(float, args[2:])))
     print(score)
 
 
