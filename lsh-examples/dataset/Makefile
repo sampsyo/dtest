@@ -1,13 +1,13 @@
 .PHONY: all
 all: little
 
-little: glove.6B.50d.1k.dat glove.42B.300d.1k.dat glove.twitter.27B.25d.1k.dat
-big: glove.6B.50d.dat glove.42B.300d.dat glove.twitter.27B.25d.dat
+little: glove.6B.100d.1k.dat glove.42B.300d.1k.dat glove.twitter.27B.25d.1k.dat
+big: glove.6B.100d.dat glove.42B.300d.dat glove.twitter.27B.25d.dat
 
 # 6B: Wikipedia 2014 + Gigaword 5
 glove.6B.zip:
 	curl -O http://nlp.stanford.edu/data/glove.6B.zip
-glove.6B.50d.txt: glove.6B.zip
+glove.6B.100d.txt: glove.6B.zip
 	unzip $^
 	touch $@
 
