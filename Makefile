@@ -5,3 +5,7 @@ clean:
 .PHONY: dtest
 dtest:
 	python3 -m $@ hash
+
+.PHONY: deploy
+deploy:
+	make -C paper deploy

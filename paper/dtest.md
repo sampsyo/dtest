@@ -118,7 +118,16 @@ When it has, the service can pay the cost to retrain the model to adapt to chang
 
 [overview]: fig/overview.pdf { width: 3in; }
 
-system overview
+This section describes &sysname;, our prototype system for enforcing statistical quality properties with distribution testing.
+We design &sysname; as an analog to traditional testing tools, which interface with the system under test (SUT) via a *test harness*.
+The programmer specifies the target correctness property for the application, and the harness lets &sysname; measure it in execution of the SUT.
+
+The overall goal in &sysname; is to automatically choose the right application parameters according to the distribution of inputs it receives.
+The design uses an off-line phase and an on-line phase.
+In the off-line phase, we use a collection of candidate input distributions to measure the program, and we choose the best program configuration for each distribution.
+In the on-line phase, we use distribution testing to detect which candidate distribution is closest to the current inputs.
+Then, &sysname; configures the program according to the best settings found in the off-line phase for that distribution.
+Figure [#fig-overview] summarizes the complete process.
 
 # Case Study
 
