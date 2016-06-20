@@ -116,7 +116,7 @@ When it has, the service can pay the cost to retrain the model to adapt to chang
 ![overview][]
 ~
 
-[overview]: fig/overview.pdf { width: 3in; }
+[overview]: fig/overview.pdf { width: 4in; }
 
 This section describes &sysname;, our prototype system for enforcing statistical quality properties with distribution testing.
 We design &sysname; as an analog to traditional testing tools, which interface with the system under test (SUT) via a *test harness*.
