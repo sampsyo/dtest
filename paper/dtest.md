@@ -45,36 +45,22 @@ We show that &sysname; can automatically adapt an LSH algorithm's parameters to 
 
 # Statistical Quality Properties
 
-TK: Intro to the properties we want to enforce.
+This section describes the range of properties we target with this work.
+We use example applications and properties from different categories to illustrate the breadth of statistical quality properties among disparate domains and different categories of program behavior.
+The rest of the paper develops a generic methodology for enforcing all of these properties.
 
-&sysname; can enforce statistical quality properties that describe any kind of program behavior.
-We develop a series of case studies where the properties encompass performance, parallelism, accuracy, and classification precision.
-accuracy, reliability, performance, and parallelism.
-The applications domains are:
+In general, a statistical quality property is a criterion that a software developer has in mind that applies to the *probability* of any program behavior.
+If $x$ is a program execution and $p$ is a predicate that decides whether execution has a certain behavior, then a statistical quality property has the form $\text{Pr}\left[p(x)\right] \ge t$ where $t$ is a probability threshold.
+The predicate $p$ characterizes something desirable about about the execution's resource usage, output, or side effects.
 
-* Hash functions, where the distribution of input keys affects *performance* via the balance among hash-table buckets.
-* Similarity search, where the distribution of vectors dictates the *parallelism* in the algorithm.
-* Image filtering, where approximation strategies offer varying *accuracy* depending on the distribution of input pixels.
-* Machine-learning models, where training hyperparameters control the *precision* and *recall* of the learned model for any given input distribution.
+We enumerate a range of example applications and their associated statistical quality properties.
 
-In each case, the application's statistical quality property cannot be enforced using a traditional, deterministic correctness tool.
-We show that &syname; can enforce the property by making dynamic decisions based on changing inputs.
-In each case, the &sysname;-augmented version of the program outperforms the best non-adaptive configuration by...
+#### Performance: hashing.
 
-introduce the application; the quality metric; the distribution test (from the previous section) that we will use
-
-## Performance: Hash Functions
-
-- Main related work: Seven-dimensional hash comparison, where one dimension is distribution.  They look at "Dense" = $\{1,2,..,n\}$, and "Sparse" = random 64-bit ints, and "Grid" = eight ints, each in $\{0,1,2,..,14\}$.
+Seven-dimensional hash comparison, where one dimension is distribution.  They look at "Dense" = $\{1,2,..,n\}$, and "Sparse" = random 64-bit ints, and "Grid" = eight ints, each in $\{0,1,2,..,14\}$.
 [@hashcompare]
 
-- Goal: reproduce one of their results.
-
-- They claim one result about Mult-Shift being more "stable" than Murmur as you change the input distribution (bottom of page 103).
-
-- Ideal outcome:
-
-## Parallelism: Similarity Search
+#### Parallelism: similarity search.
 
 - Goal: show that similarity search configurations perform better/worse depending on testable properties of the input distribution (of binary vectors)
 
@@ -86,9 +72,7 @@ introduce the application; the quality metric; the distribution test (from the p
 then if the vectors are random looking in the chunk, it will filter well,
 but if the chunks are highly modal (only a few values in that chunk) then it will not filter very much at all.
 
-- Ideal outcome:
-
-## Approximation: Image Filters
+#### Accuracy: image filtering.
 
 - Goal: show that approximate image filters have better/worse quality depending on the distribution of pixels or other high-level image features.
 
@@ -96,13 +80,11 @@ but if the chunks are highly modal (only a few values in that chunk) then it wil
 
 - We considering the opencv set of algorithms for image gradient / edge detection (?).  There were a handful of different approximations to some sort fo standard gradient algorithm.
 
-## Accuracy: Machine Learning
+#### Precision and recall: machine learning.
 
 - Goal: show that for some machine learning algorithm/application, we can determine the best time to retrain the model, in response to changes in the input data.
 
 - I am imagining an algorithm that takes a long time to train, and has basically the same predictive power, unless the training data change significantly.  And if the data change, then retraining will be necessary, although expensive.
-
-- Ideal outcome:
 
 # Related Work
 
