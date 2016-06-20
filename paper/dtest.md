@@ -79,11 +79,18 @@ but if the chunks are highly modal (only a few values in that chunk) then it wil
 
 #### Accuracy: image filtering.
 
-- Goal: show that approximate image filters have better/worse quality depending on the distribution of pixels or other high-level image features.
+Approximations are commonplace in many applications.
+Especially in domains that deal with sensory data like images and audio, faster but less accurate algorithms can be essential.
+Many approximations are more accurate on some inputs and less accurate on others; it is sufficient for them to be accurate on *most* of the executions.
 
-- Concretely, could look at a data set that is mostly faces, or mostly landscapes, or mostly abstract art, and these should be testable easily, and different filters should perform differently.
+Many common image filters have widely used approximations.
+For example, to compute the gradient magnitude at every point in an image for edge detection, imaging pipelines typically use a simple convolution that estimates the gradient locally.
+Several such gradient approximations have been proposed: Sobel, Scharr, Prewitt, Roberts cross, and others [@costella].
+Some filters are more expensive than others, and some are more accurate than others.
+The complexity of the image can dictate which filter offers the best accuracy--performance trade-off.
 
-- We considering the opencv set of algorithms for image gradient / edge detection (?).  There were a handful of different approximations to some sort fo standard gradient algorithm.
+With distribution testing, the programmer can test each possible filter using different distribution of image pixel windows.
+At run time, the imaging pipeline can automatically detect the right filter for each image.
 
 #### Precision and recall: machine learning.
 
