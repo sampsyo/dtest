@@ -57,8 +57,13 @@ We enumerate a range of example applications and their associated statistical qu
 
 #### Performance: hashing.
 
-Seven-dimensional hash comparison, where one dimension is distribution.  They look at "Dense" = $\{1,2,..,n\}$, and "Sparse" = random 64-bit ints, and "Grid" = eight ints, each in $\{0,1,2,..,14\}$.
-[@hashcompare]
+Input distributions affect the performance of many systems.
+For example, a hash table's balance depends on the hash function's ability to map the input distribution uniformly onto the table's buckets.
+A given hash function can be a better match for some key distributions and a worse match for others.
+Recent work has evaluated the suitability of hash functions against simple key distributions [@hashcompare].
+
+To optimize for balance, a hash table should be able to dynamically decide which hash function to use based on the keys it sees at run time.
+Distribution testing can help: the developer can test the hash table against a variety of possible input distributions and a collection of well-known hash functions in development, and then a distribution test can help choose the best mapping for the real data.
 
 #### Parallelism: similarity search.
 
