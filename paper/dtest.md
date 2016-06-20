@@ -67,15 +67,12 @@ Distribution testing can help: the developer can test the hash table against a v
 
 #### Parallelism: similarity search.
 
-- Goal: show that similarity search configurations perform better/worse depending on testable properties of the input distribution (of binary vectors)
+The execution time of a parallel algorithms depends on the balance of the work load among the processing elements.
+For the algorithmic task of finding all pairs of similar vectors (i.e. performing a similarity join), we observe that many published algorithms have a high sensitivity to the distribution of input data.
+For example, most similarity join algorithms utilize a filter-then-verify pipeline, which parallelizes the workload using a set of filters over the input data.
+For any fixed filter, a worst-case input distribution will lead to a very imbalanced workload. For example, prefix filters, which partition the data based on the first few vector coordinates, perform much better for random data than for data with highly modal prefixes.
 
-- Filter-then-verify pipelines seem amenable to dtesting, since we can test the filtering capabilities, and then the verification time/quality is proportional to the filtering successfulness.
-
-- In the all-pairs Hamming similarity join problem space, many papers have used filtering techniques that have performance directly scaling with the data distribution "randomness".
-
-- For example, if you do filtering based on chunks of the input bits,
-then if the vectors are random looking in the chunk, it will filter well,
-but if the chunks are highly modal (only a few values in that chunk) then it will not filter very much at all.
+Ideal outcome: Using &sysname; we demonstrate that dynamic filter selection, based on the distribution of the input data, may improve performance dramatically.
 
 #### Accuracy: image filtering.
 
