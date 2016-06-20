@@ -109,13 +109,39 @@ When it has, the service can pay the cost to retrain the model to adapt to chang
 
 # Enforcing Statistical Quality Properties with Distribution Testing
 
-~ Figure { #fig-overview; caption: "Overview of the dtest system." }
+~ Figure { #fig-overview; caption: "Overview of the &sysname; system." }
 ![overview][]
 ~
 
-[overview]: fig/overview.pdf { width: 3in; }
+[overview]: fig/overview.pdf { width: 4in; }
 
-system overview
+This section describes &sysname;, our prototype system for enforcing statistical quality properties with distribution testing.
+We design &sysname; as an analog to traditional testing tools, which interface with the system under test (SUT) via a *test harness*.
+The programmer specifies the target correctness property for the application, and the harness lets &sysname; measure it in execution of the SUT.
+
+The overall goal in &sysname; is to automatically choose the right application parameters according to the distribution of inputs it receives.
+The design uses an off-line phase and an on-line phase.
+In the off-line phase, we use a collection of candidate input distributions to measure the program, and we choose the best program configuration for each distribution.
+In the on-line phase, we use distribution testing to detect which candidate distribution is closest to the current inputs.
+Then, &sysname; configures the program according to the best settings found in the off-line phase for that distribution.
+Figure [#fig-overview] summarizes the complete process.
+
+#### Off-line phase.
+
+To use &sysname;, the developer two sets of information: candidate input distributions and program configurations.
+The input distributions represent possible deployment scenarios for the application; the configurations represent different choices that the program can make.
+The programmer also provides a way to measure the *quality score* of a given execution of the program to capture the statistical quality property they want to enforce.
+The off-line phase in &sysname; navigates the cross product of the distributions and the configurations: it runs the program with each pairing and records the corresponding quality score.
+To communicate with the on-line phase, &sysname; produces a mapping that matches each candidate distribution with the best corresponding program configuration---the one with the highest quality score.
+
+#### On-line phase.
+
+In deployment, &sysname; uses distribution testing.
+It collects a sample of the dynamic invocations of the program and uses them to infer the current input distribution.
+Specifically, each candidate input distribution comes with a distribution test, and &sysname; compares the on-line sample to each candidate using the corresponding test.
+It determines the candidate distribution that matches the input sample most closely.
+Using the mapping from the off-line phase, &sysname; produces the best configuration for that inferred distribution.
+
 
 # Case Study
 
