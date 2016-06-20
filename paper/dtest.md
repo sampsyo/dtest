@@ -128,6 +128,20 @@ implementation / usability / programmability case study
 
 - Ideal outcome:
 
+# Nearest Neighbor Search using Locality Sensitive Hashing
+
+## Parallel LSH Parameter Selection
+
+
+We overview the parameter selection algorithm in [@falconn].  First, they ``set the algorithm parameters so that the empirical probability of successfully finding the exact nearest neighbor is at least 0.9.''
+Moreover, we set ``the number of LSH tables L so that the amount of additional memory occupied by the LSH data structure is comparable to the amount of memory necessary for storing the data set.''
+They ``perform a grid search over the remaining parameter space and report the best combination of parameters.''
+
+We overview the parameter selection algorithm in [@plsh].
+They enumerate $k = 1, 2, . . . k_{max}$, and for each $k$ select the smallest value of $m$ satisfying Equation 7.3 (probability of correctness greater than a threshold).
+The values of $E[\#unique]$ and $E[\#collisions]$ have empirical estimators (through sampling, using a random set of 1000 queries and 1000 data points).
+``For large amounts of data, $k_{max}$ is determined by the amount of RAM in the system. The storage required for the hash tables increases with $L$, which in turn increases super-linearly with $k$. They also suggest that they want to store about 1000 hash tables, which provides a range of ideal values for $k$ and $m$.
+
 # Results
 
 - System-centric outcome
