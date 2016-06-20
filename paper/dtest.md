@@ -94,9 +94,15 @@ At run time, the imaging pipeline can automatically detect the right filter for 
 
 #### Precision and recall: machine learning.
 
-- Goal: show that for some machine learning algorithm/application, we can determine the best time to retrain the model, in response to changes in the input data.
+Machine-learning models depend on the comprehensiveness of their training.
+In a public service, they can benefit from periodic re-training.
+For example, a web service might classify objects in photographs, and the kinds of photos that users upload might change over time.
+Such a service needs to know when users' inputs are changing substantially with respect to earlier behavior.
+The overall goal is to classify images correctly with a high probability.
 
-- I am imagining an algorithm that takes a long time to train, and has basically the same predictive power, unless the training data change significantly.  And if the data change, then retraining will be necessary, although expensive.
+Distribution testing can help answer this question.
+The system can evaluate the model's precision and recall on a sample of user data, and as new data comes in, automatically decide whether the distribution has shifted from the training set.
+When it has, the service can pay the cost to retrain the model to adapt to changing demands.
 
 # Related Work
 
