@@ -110,7 +110,7 @@ but if the chunks are highly modal (only a few values in that chunk) then it wil
 - input distributions matter
 - distribution testing
 
-# The &sysname; Approach to Enforcing Statistical Quality Properties
+# Enforcing Statistical Quality Properties with Distribution Testing
 
 ~ Figure { #fig-overview; caption: "Overview of the dtest system." }
 ![overview][]
@@ -168,5 +168,9 @@ implementation / usability / programmability case study
         - Outcome:
 
 # Conclusion
+
+# Appendix: Using the &sysname; Tool { @h1:"A" }
+
+A kind of "user manual" goes here.
 
 [BIB]
