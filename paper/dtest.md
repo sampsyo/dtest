@@ -40,7 +40,7 @@ an off-line testing phase that measures execution quality for a set of possible 
 and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
 
 In this paper, we describe the class of statistical properties that we can enforce with &sysname;'s approach.
-We develop a case study that focuses on *locality-sensitive hashing* [TK], a domain where performance depends heavily on input distributions.
+We develop a case study that focuses on nearest-neighbor searching.  In particular, consider a variety of *locality-sensitive hashing* [TK] algorithms.  We observe that performance depends heavily on the combination of the algorithm parameters and the input distribution. 
 We show that &sysname; can automatically adapt an LSH algorithm's parameters to match a variety of real-world data sets.
 
 # Statistical Quality Properties
