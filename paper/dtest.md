@@ -28,14 +28,24 @@ We propose a methodology and tool for enforcing statistical quality properties.
 We identify a class of application properties that, rather than constraining the behavior on any individual execution, describe statistical criteria over the aggregate behavior across many executions.
 Statistical quality properties can include many different aspects of program behavior; we discuss case studies involving performance, parallelism, approximation, and learning accuracy.
 
-Our approach is to take advantage of a body of theoretical work on *distribution testing* [TK].
-Distribution tests use a small number of samples to make a statistical guarantee about the overall distribution of a data set.
+In this work, we propose that software should take advantage of
+a body of theoretical work on *distribution testing* [TK].
+Distribution tests use a small number of samples to make a statistical statement about the overall distribution of a data set.
+They can efficiently decide whether the overall distribution of inputs in production match a distribution that was anticipated in testing.
 
 We describe &sysname;, a tool that tests and enforces statistical quality properties.
 The goal is to use distribution testing to draw conclusions about aggregate program behavior using only a few input examples.
 &sysname; consists of two phases:
 an off-line testing phase that measures execution quality for a set of possible input distributions;
 and an on-line classification phase that uses distribution testing to predict the quality for the current input conditions.
+
+In this paper, we describe the class of statistical properties that we can enforce with &sysname;'s approach.
+We develop a case study that focuses on *locality-sensitive hashing* [TK], a domain where performance depends heavily on input distributions.
+We show that &sysname; can automatically adapt an LSH algorithm's parameters to match a variety of real-world data sets.
+
+# Statistical Quality Properties
+
+TK: Intro to the properties we want to enforce.
 
 &sysname; can enforce statistical quality properties that describe any kind of program behavior.
 We develop a series of case studies where the properties encompass performance, parallelism, accuracy, and classification precision.
@@ -50,26 +60,6 @@ The applications domains are:
 In each case, the application's statistical quality property cannot be enforced using a traditional, deterministic correctness tool.
 We show that &syname; can enforce the property by making dynamic decisions based on changing inputs.
 In each case, the &sysname;-augmented version of the program outperforms the best non-adaptive configuration by...
-
-# Related Work
-
-- auto-tuning (PetaBricks [@petabricks]) and run-time algorithm selection (Nitro)
-- input distributions matter
-- distribution testing
-
-# System Overview
-
-~ Figure { #fig-overview; caption: "Overview of the dtest system." }
-![overview][]
-~
-
-[overview]: fig/overview.pdf { width: 3in; }
-
-system overview
-
-# Distribution Tests
-
-# Applications
 
 introduce the application; the quality metric; the distribution test (from the previous section) that we will use
 
@@ -114,9 +104,23 @@ but if the chunks are highly modal (only a few values in that chunk) then it wil
 
 - Ideal outcome:
 
-# Experience
+# Related Work
 
-## Implementation
+- auto-tuning (PetaBricks [@petabricks]) and run-time algorithm selection (Nitro)
+- input distributions matter
+- distribution testing
+
+# The &sysname; Approach to Enforcing Statistical Quality Properties
+
+~ Figure { #fig-overview; caption: "Overview of the dtest system." }
+![overview][]
+~
+
+[overview]: fig/overview.pdf { width: 3in; }
+
+system overview
+
+# Case Study
 
 implementation / usability / programmability case study
 
@@ -162,6 +166,7 @@ implementation / usability / programmability case study
         - Possible Schemes:
         - System: Pick the algorithm+structure depending on the input distribution
         - Outcome:
+
 # Conclusion
 
 [BIB]
